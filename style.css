@@ -1,0 +1,197 @@
+:root {
+    /* DEFAULT: Dark Mode (Tungi rejim) - Premium & Space */
+    --bg-color: #04050e;
+    --primary-glow: #a855f7;
+    --secondary-glow: #00f2fe;
+    --text-main: #ffffff;
+    --text-muted: #94a3b8;
+    --glass-bg: rgba(255, 255, 255, 0.02);
+    --glass-border: rgba(255, 255, 255, 0.07);
+    --btn-text: #000;
+    --btn-bg: #ffffff;
+    --btn-hover-shadow: rgba(0, 242, 254, 0.4);
+    --mouse-trail-color: rgba(255, 255, 255, 0.7);
+}
+
+/* Light Mode (Kunduzgi rejim) o'zgaruvchilari */
+body.light-mode {
+    --bg-color: #f8fafc;
+    --primary-glow: #7e22ce;
+    --secondary-glow: #0ea5e9;
+    --text-main: #0f172a;
+    --text-muted: #475569;
+    --glass-bg: rgba(0, 0, 0, 0.03);
+    --glass-border: rgba(0, 0, 0, 0.07);
+    --btn-text: #ffffff;
+    --btn-bg: #0f172a;
+    --btn-hover-shadow: rgba(126, 34, 206, 0.2);
+    --mouse-trail-color: rgba(15, 23, 42, 0.5);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    margin: 0;
+    overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#bgCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -2;
+}
+
+#mouseTrailCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Navbar */
+.navbar {
+    background: rgba(4, 5, 14, 0.4);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-bottom: 1px solid var(--glass-border);
+    padding: 15px 0;
+    transition: all 0.3s ease;
+}
+
+.navbar-brand {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    background: linear-gradient(45deg, var(--secondary-glow), var(--primary-glow));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.navbar-nav .nav-link {
+    color: var(--text-muted) !important;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin: 0 12px;
+    transition: 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--text-main) !important;
+}
+
+/* Mode Switcher */
+.mode-switch, .lang-switch {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-muted);
+    padding: 8px 12px;
+    border-radius: 100px;
+    cursor: pointer;
+    margin-left: 15px;
+    transition: 0.3s;
+}
+
+.mode-switch:hover, .lang-switch:hover {
+    border-color: var(--primary-glow);
+    color: var(--text-main);
+}
+
+/* Hero Section */
+.hero {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 0 20px;
+}
+
+.hero h1 {
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -2px;
+    margin-bottom: 25px;
+}
+
+#typing {
+    background: linear-gradient(135deg, var(--secondary-glow) 0%, #4facfe 30%, var(--primary-glow) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+}
+
+.hero p {
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    color: var(--text-muted);
+    max-width: 650px;
+    margin: 0 auto 40px;
+}
+
+.premium-btn {
+    padding: 16px 45px;
+    font-weight: 700;
+    color: var(--btn-text);
+    background: var(--btn-bg);
+    border-radius: 100px;
+    text-decoration: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    transition: 0.4s ease;
+}
+
+.premium-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px var(--btn-hover-shadow);
+}
+
+/* Other Sections */
+.projects-section {
+    padding: 100px 0;
+}
+
+.section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(2.2rem, 5vw, 3rem);
+    font-weight: 700;
+    margin-bottom: 60px;
+}
+
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 28px;
+    padding: 40px 35px;
+    height: 100%;
+}
+
+.view-btn {
+    padding: 11px 28px;
+    font-size: 0.9rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
+    border-radius: 100px;
+    text-decoration: none;
+}
+
+footer {
+    background: #020308;
+    border-top: 1px solid var(--glass-border);
+    padding: 80px 0 40px;
+    text-align: center;
+}

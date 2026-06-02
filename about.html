@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="uz" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Portfolio | About Me</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root[data-theme="light"] {
+            --bg-color: #f1f5f9;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --accent: #6366f1;
+            --border: #e2e8f0;
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+            --progress-bg: #e2e8f0;
+        }
+
+        :root[data-theme="dark"] {
+            --bg-color: #020617;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #818cf8;
+            --border: rgba(255, 255, 255, 0.1);
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            --progress-bg: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            overflow-x: hidden;
+            perspective: 1000px;
+        }
+
+        #starCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+
+        .nav-controls {
+            position: fixed;
+            top: 20px;
+            width: 90%;
+            max-width: 1200px;
+            display: flex;
+            justify-content: space-between;
+            z-index: 1000;
+        }
+
+        .back-btn,
+        .control-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 12px 20px;
+            border-radius: 16px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            transform: translateX(-5px);
+            border-color: var(--accent);
+        }
+
+
+        .about-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            max-width: 850px;
+            width: 100%;
+            border-radius: 32px;
+            padding: 50px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(20px);
+            z-index: 1;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            flex-shrink: 0;
+        }
+
+        .avatar-container::after {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border: 2px dashed var(--accent);
+            border-radius: 50%;
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--card-bg);
+        }
+
+        .profile-info h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #818cf8, #ec4899);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-item {
+            background: rgba(129, 140, 248, 0.1);
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--border);
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+
+        .social-btn:hover {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+        }
+
+
+        .skill-container {
+            margin-bottom: 25px;
+        }
+
+        .skill-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: var(--progress-bg);
+            border-radius: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 20px;
+            width: 0;
+            background: linear-gradient(90deg, var(--accent), #c084fc);
+            box-shadow: 0 0 15px rgba(129, 140, 248, 0.4);
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .lang-dropdown {
+            position: relative;
+        }
+
+        .dropdown-content button:hover {
+            background: rgba(129, 140, 248, 0.1) !important;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-top: 140px;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-controls {
+                position: absolute;
+                flex-direction: column;
+                width: 100%;
+                gap: 10px;
+                padding: 0 20px;
+                top: 20px;
+            }
+
+            .nav-controls>div {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .about-card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="starCanvas"></canvas>
+
+    <div class="nav-controls">
+        <a href="index.html" class="back-btn" id="backBtn">
+            <i class="fas fa-arrow-left"></i>
+            <span id="txtBack">Orqaga</span>
+        </a>
+        <div style="display: flex; gap: 20px;">
+            <div class="lang-dropdown">
+                <button class="control-btn" onclick="toggleDropdown(event)" id="langBtn">🇺🇿 O'zbekcha</button>
+                <div class="dropdown-content" id="langMenu"
+                    style="display: none; position: absolute; right: 0; top: 50px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 10px; backdrop-filter: blur(10px); z-index: 1001; min-width: 150px; max-height: 250px; overflow-y: auto;">
+                    <button onclick="changeLanguage('uz')"
+                        style="display:block; width:100%; padding:8px; background:none; border:none; color:var(--text-main); cursor:pointer; text-align:left;">🇺🇿
+                        O'zbekcha</button>
+                    <button onclick="changeLanguage('en')"
+                        style="display:block; width:100%; padding:8px; background:none; border:none; color:var(--text-main); cursor:pointer; text-align:left;">🇺🇸
+                        English</button>
+                    <button onclick="changeLanguage('ru')"
+                        style="display:block; width:100%; padding:8px; background:none; border:none; color:var(--text-main); cursor:pointer; text-align:left;">🇷🇺
+                        Русский</button>
+                    <button onclick="changeLanguage('tr')"
+                        style="display:block; width:100%; padding:8px; background:none; border:none; color:var(--text-main); cursor:pointer; text-align:left;">🇹🇷
+                        Türkçe</button>
+                    <button onclick="changeLanguage('kz')"
+                        style="display:block; width:100%; padding:8px; background:none; border:none; color:var(--text-main); cursor:pointer; text-align:left;">🇰🇿
+                        Қазақша</button>
+                    <button onclick="changeLanguage('kg')"
+                        style="display:block; width:100%; padding:8px; background:none; border:none; color:var(--text-main); cursor:pointer; text-align:left;">🇰🇬
+                        Кыргызча</button>
+                </div>
+            </div>
+            <button class="control-btn" onclick="toggleTheme()" id="themeBtn">☀️ Light</button>
+        </div>
+    </div>
+
+    <div class="about-card" id="tiltCard">
+        <div class="profile-header">
+            <div class="avatar-container">
+                <img src="https://i.pinimg.com/736x/58/ac/1f/58ac1fb9a6f71cfbf6874b9c7532d88b.jpg" alt="Avatar"
+                    class="avatar">
+            </div>
+            <div class="profile-info">
+                <h1 id="userName">DILNURA Qadamboyeva</h1>
+                <p id="userJob" style="font-size: 1.2rem; color: var(--accent); font-weight: 700;">Frontend Developer
+                </p>
+                <div class="social-links">
+                    <a href="#" class="social-btn"><i class="fab fa-telegram"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-github"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-container">
+            <div class="stat-item">
+                <span class="stat-number" data-target="15">0</span>
+                <span class="stat-label" id="lblProj">Loyihalar</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" data-target="2">0</span>
+                <span class="stat-label" id="lblExp">Yillik Tajriba</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" data-target="50">0</span>
+                <span class="stat-label" id="lblClient">Mijozlar</span>
+            </div>
+        </div>
+
+        <h2 class="bio-title" id="aboutTitle" style="margin-bottom: 15px;">
+            <i class="fas fa-user-circle" style="color: var(--accent); margin-right: 10px;"></i> Men haqimda
+        </h2>
+        <p id="aboutText" style="line-height: 1.8; color: var(--text-muted);">
+            Mening ismim <strong>DILNURA QADAMBOYEVA </strong>. Men 2012-yilda tug'ilganman va hozirda
+            maktab o'quvchisiman. Axborot texnologiyalari va dasturlash olamiga juda katta qiziqishim borligi sababli,
+            <strong>2025-yilning sentyabr oyidan</strong> boshlab IT sohasiga qadam qo'ydim va ushbu jozibador
+            yo'nalishda chuqur bilim olishni boshladim. Qisqa vaqt ichida veb-texnologiyalar yordamida chiroyli
+            dizaynlar va interaktiv loyihalar yarata olish darajasiga yetdim! 
+             Men zamonaviy texnologiyalar olamida foydalanuvchilar uchun qulay, vizual
+            jihatdan
+            mukammal va yuqori tezlikda ishlaydigan veb-saytlar hamda interaktiv loyihalar yaratish bilan
+            shug'ullanaman.
+        </p>
+
+        <div class="skills-section" style="margin-top: 40px;">
+            <h3 id="skillsTitle">🛠️ Texnik Mahorat</h3>
+
+            <div class="skill-container">
+                <div class="skill-info"><span>HTML5 </span><span>95%</span></div>
+                <div class="progress-bar">
+                    <div class="progress-fill" data-width="95%"></div>
+                </div>
+            </div>
+            <div class="skill-container">
+                <div class="skill-info"><span>CSS </span><span>96%</span></div>
+                <div class="progress-bar">
+                    <div class="progress-fill" data-width="96%"></div>
+                </div>
+            </div>
+            <div class="skill-container">
+                <div class="skill-info"><span>Tailwind CSS</span><span>85%</span></div>
+                <div class="progress-bar">
+                    <div class="progress-fill" data-width="85%"></div>
+                </div>
+            </div>
+            <div class="skill-container">
+                <div class="skill-info"><span>JavaScript</span><span>70%</span></div>
+                <div class="progress-bar">
+                    <div class="progress-fill" data-width="70%"></div>
+                </div>
+            </div>
+            <div class="skill-container">
+                <div class="skill-info"><span>Github</span><span>40%</span></div>
+                <div class="progress-bar">
+                    <div class="progress-fill" data-width="40%"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-section" style="margin-top: 50px;">
+            <h3 id="eduTitle" style="margin-bottom: 25px;">🎓 Ta'lim va O'sish</h3>
+            <div class="timeline" style="border-left: 2px solid var(--accent); padding-left: 20px; margin-left: 10px;">
+                <div class="timeline-item" style="margin-bottom: 30px; position: relative;">
+                    <div
+                        style="position: absolute; left: -27px; top: 5px; width: 12px; height: 12px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 10px var(--accent);">
+                    </div>
+                    <span style="font-size: 0.85rem; color: var(--accent); font-weight: 700;">2026 - Hozirgi vaqt</span>
+                    <h4 id="eduItem1Title" style="margin: 5px 0;">Frontend Development</h4>
+                    <p id="eduItem1Text" style="font-size: 0.9rem; color: var(--text-muted);">IT Akademiyasi va
+                        zamonaviy onlayn platformalar orqali veb-dasturlashni o'rganmoqdaman.</p>
+                </div>
+                <div class="timeline-item" style="margin-bottom: 10px; position: relative;">
+                    <div
+                        style="position: absolute; left: -27px; top: 5px; width: 12px; height: 12px; background: var(--text-muted); border-radius: 50%;">
+                    </div>
+                    <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 700;">2020 
+                        </span>
+                    <h4 id="eduItem2Title" style="margin: 5px 0;">O'rta ta'lim maktabi</h4>
+                    <p id="eduItem2Text" style="font-size: 0.9rem; color: var(--text-muted);">Maktabda aniq fanlar,
+                        matematika va ingliz tilini chuqurlashtirilgan tartibda o'rganib kelmoqdaman.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="certificates-section" style="margin-top: 50px;">
+            <h3 id="certTitle" style="margin-bottom: 20px;">🏆 Sertifikatlar va Yutuqlar</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                <div class="cert-card"
+                    style="background: rgba(129, 140, 248, 0.05); padding: 20px; border-radius: 20px; border: 1px solid var(--border); text-align: center;">
+                    <i class="fas fa-award" style="font-size: 2.5rem; color: #ffd700; margin-bottom: 12px;"></i>
+                    <h5 id="cert1Name" style="font-size: 0.95rem; font-weight: 700; margin-bottom: 5px;">HTML/CSS
+                        Specialization</h5>
+                    <p style="font-size: 0.8rem; color: var(--text-muted);">Online IT Academy</p>
+                </div>
+                <div class="cert-card"
+                    style="background: rgba(129, 140, 248, 0.05); padding: 20px; border-radius: 20px; border: 1px solid var(--border); text-align: center;">
+                    <i class="fas fa-certificate"
+                        style="font-size: 2.5rem; color: var(--accent); margin-bottom: 12px;"></i>
+                    <h5 id="cert2Name" style="font-size: 0.95rem; font-weight: 700; margin-bottom: 5px;">Responsive Web
+                        Design</h5>
+                    <p style="font-size: 0.8rem; color: var(--text-muted);">Frontend Path</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="goals-section" style="margin-top: 50px;">
+            <h3 id="goalsTitle" style="margin-bottom: 20px;">🎯 Kelajakdagi Maqsadlar</h3>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <div
+                    style="display:flex; align-items:center; gap:10px; background:rgba(255,255,255,0.02); padding:12px; border-radius:12px; border: 1px dashed var(--border);">
+                    <i class="fas fa-bullseye" style="color: #ec4899;"></i>
+                    <span id="goal1">2026-yil yakunigacha ReactJS va Next.js freymvorklarini mukammal darajada
+                        o'rganish.</span>
+                </div>
+                <div
+                    style="display:flex; align-items:center; gap:10px; background:rgba(255,255,255,0.02); padding:12px; border-radius:12px; border: 1px dashed var(--border);">
+                    <i class="fas fa-bullseye" style="color: var(--accent);"></i>
+                    <span id="goal2">Murakkab va real biznes loyihalar uchun web-ilovalarni mustaqil ishlab
+                        chiqish.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        const translations = {
+            uz: {
+                btn: "🇺🇿 O'zbekcha", back: "Orqaga", job: "Frontend Dasturchi", title: "Men haqimda", skills: "Texnik Mahorat",
+                proj: "Loyihalar", exp: "Tajriba", client: "Mijozlar", eduTitle: "Ta'lim va O'sish",
+                certTitle: "Sertifikatlar va Yutuqlar", goalsTitle: "Kelajakdagi Maqsadlar",
+                about: "Mening ismim <strong>DILNURA QADAMBOYEVA DILSHODBEKOVNA</strong>. Men 2012-yilda tug'ilganman va hozirda maktab o'quvchisiman. Axborot texnologiyalari va dasturlash olamiga juda katta qiziqishim borligi sababli, <strong>2025-yilning sentyabr oyidan</strong> boshlab IT sohasiga qadam qo'ydim. Qisqa vaqt ichida veb-texnologiyalar yordamida chiroyli dizaynlar va interaktiv loyihalar yarata olish darajasiga yetdim! Kelajakda eng kuchli dasturchilardan biri bo'lishni maqsad qilganman."
+            },
+            tr: {
+                btn: "🇹🇷 Türkçe", back: "Geri", job: "Ön Uç Geliştirici", title: "Hakkımda", skills: "Teknik Beceriler",
+                proj: "Projeler", exp: "Deneyim", client: "Müşteriler", eduTitle: "Eğitim ve Gelişim",
+                certTitle: "Sertifikalar ve Başarılar", goalsTitle: "Gelecek Hedefleri",
+                about: "Benim adım <strong>DILNURA QADAMBOYEVA</strong>. 2012 doğumluyum ve şu an öğrenciyim. Bilişim ve yazılım dünyasına olan büyük ilgim nedeniyle <strong>Eylül 2025</strong>'ten itibaren BT sektörüne adım attım. Kısa sürede web teknolojileriyle harika tasarımlar ve etkileşimli projeler üretecek seviyeye geldim! Gelecekte en iyi yazılımcılardan biri olmayı hedefliyorum."
+            },
+            kz: {
+                btn: "🇰🇿 Қазақша", back: "Артқа", job: "Frontend әзірлеуші", title: "Men туралы", skills: "Техникалық дағдылар",
+                proj: "Жобалар", exp: "Тәжірибе", client: "Клиенттер", eduTitle: "Білім мен өсу",
+                certTitle: "Сертификаттар мен жетістіктер", goalsTitle: "Болашақ мақсаттар",
+                about: "Менің атым <strong>DILNURA QADAMBOYEVA</strong>. 2012 жылы туғанмын және мектеп оқушысымын. Ақпараттық технологиялар мен бағдарламауға деген үлкен қызығушылығымның арқасында <strong>2025 жылдың қыркүйегінен</strong> бастап IT саласына қадам бастым. Қысқа уақыт ішінде веб-технологиялардың көмегімен әдемі дизайн мен интерактивті жобалар жасау деңгейіне жеттім! Болашақта мықты бағдарламашы болуды мақсат етемін."
+            },
+            kg: {
+                btn: "🇰🇬 Кыргызча", back: "Артка", job: "Frontend иштеп чыгуучу", title: "Мен жөнүндө", skills: "Техникалык көндүмдөр",
+                proj: "Долбоорлор", exp: "Таржымал", client: "Кардарлар", eduTitle: "Билим жана өсүү",
+                certTitle: "Сертификаттар жана жетишкендиктер", goalsTitle: "Келечектеги максаттар",
+                about: "Менин атым <strong>DILNURA QADAMBOYEVA</strong>. 2012-жылы туулгам жана учурда мектеп окуучусумун. IT жана программалоо дүйнөсүнө болгон чоң кызыгуумдан улам <strong>2025-жылдын сентябрь айынан</strong> баштап бул тармакка кадам таштадым. Кыска убакыттын ичинде веб-технологиялар аркылуу кооз дизайн жана интерактивдүү долбоорлорду жаратуу деңгээлине жеттим!"
+            },
+            en: {
+                btn: "🇺🇸 English", back: "Back", job: "Frontend Developer", title: "About Me", skills: "Technical Skills",
+                proj: "Projects", exp: "Experience", client: "Clients", eduTitle: "Education & Growth",
+                certTitle: "Certificates & Achievements", goalsTitle: "Future Goals",
+                about: "My name is <strong>DILNURA QADAMBOYEVA</strong>. I was born in 2012 and am currently a school student. Due to my deep interest in IT, I stepped into the tech world in <strong>September 2025</strong>. In a short time, I have reached a level where I can build beautiful designs and interactive web projects! I aim to become one of the top developers in the future."
+            },
+            ru: {
+                btn: "🇷🇺 Русский", back: "Назад", job: "Frontend Разработчик", title: "Обо мне", skills: "Технические Навыки",
+                proj: "Проекты", exp: "Опыт", client: "Клиенты", eduTitle: "Обучение и Развитие",
+                certTitle: "Сертификаты и Достижения", goalsTitle: "Будущие Цели",
+                about: "Меня зовут <strong>ДИЛЬНУРА КАДАМБОЕВА</strong>. Я родилась в 2012 году, сейчас учусь в школе. Из-за огромного интереса к программированию я вошла в сферу ИТ в <strong>сентябре 2025 года</strong>. За короткое время научилась создавать красивые веб-дизайны и интерактивные проекты! Моя цель — стать одним из сильнейших разработчиков."
+            }
+        };
+
+        function changeLanguage(lang) {
+            const t = translations[lang];
+            if (!t) return;
+
+            document.getElementById('langBtn').innerText = t.btn;
+            document.getElementById('txtBack').innerText = t.back;
+            document.getElementById('userJob').innerText = t.job;
+
+            document.getElementById('aboutTitle').innerHTML = `<i class="fas fa-user-circle" style="color: var(--accent); margin-right: 10px;"></i> ${t.title}`;
+            document.getElementById('aboutText').innerHTML = t.about;
+
+            document.getElementById('lblProj').innerText = t.proj;
+            document.getElementById('lblExp').innerText = t.exp;
+            document.getElementById('lblClient').innerText = t.client;
+
+            document.getElementById('skillsTitle').innerText = `🛠️ ${t.skills}`;
+            document.getElementById('eduTitle').innerText = `🎓 ${t.eduTitle}`;
+            document.getElementById('certTitle').innerText = `🏆 ${t.certTitle}`;
+            document.getElementById('goalsTitle').innerText = `🎯 ${t.goalsTitle}`;
+
+            document.getElementById('langMenu').style.display = 'none';
+        }
+
+        function toggleDropdown(e) {
+            e.stopPropagation();
+            const menu = document.getElementById('langMenu');
+            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+        }
+
+        window.onclick = () => {
+            document.getElementById('langMenu').style.display = 'none';
+        }
+
+
+        const card = document.getElementById('tiltCard');
+        document.addEventListener('mousemove', (e) => {
+            let xAxis = (window.innerWidth / 2 - e.pageX) / 100;
+            let yAxis = (window.innerHeight / 2 - e.pageY) / 100;
+            card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
+
+
+        const stats = document.querySelectorAll('.stat-number');
+        stats.forEach(stat => {
+            const updateCount = () => {
+                const target = +stat.getAttribute('data-target');
+                const count = +stat.innerText.replace('+', '');
+                const speed = 200;
+                const inc = target / speed;
+                if (count < target) {
+                    stat.innerText = Math.ceil(count + inc);
+                    setTimeout(updateCount, 1);
+                } else {
+                    stat.innerText = target + "+";
+                }
+            };
+            updateCount();
+        });
+
+
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.progress-fill').forEach(bar => {
+                bar.style.width = bar.getAttribute('data-width');
+            });
+        });
+
+        function toggleTheme() {
+            const root = document.documentElement;
+            const isDark = root.getAttribute('data-theme') === 'dark';
+            root.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            document.getElementById('themeBtn').innerText = isDark ? '🌙 Dark' : '☀️ Light';
+        }
+
+
+        const canvas = document.getElementById('starCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize); resize();
+        window.addEventListener('mousemove', (e) => {
+            for (let i = 0; i < 2; i++) particles.push(new Particle(e.clientX, e.clientY));
+        });
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 3;
+                this.alpha = 1;
+                this.sX = Math.random() * 1 - 0.5;
+                this.sY = Math.random() * 1 - 0.5;
+            }
+            update() { this.x += this.sX; this.y += this.sY; this.alpha -= 0.01; }
+            draw() {
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = "#818cf8";
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, i) => { p.update(); p.draw(); if (p.alpha <= 0) particles.splice(i, 1); });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+
+</html>

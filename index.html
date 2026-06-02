@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dilnura | Premium Portfolio</title>
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #04050e;
+            --primary-glow: #a855f7;
+            --secondary-glow: #00f2fe;
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            --glass-bg: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.07);
+            --star-color: rgba(255, 255, 255, 0.75);
+            --trail-color: 255, 255, 255;
+            --btn-bg: #ffffff;
+            --btn-text: #000000;
+        }
+
+
+        body.light-mode {
+            --bg-color: #f1f5f9;
+            --primary-glow: #7e22ce;
+            --secondary-glow: #0ea5e9;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --glass-bg: rgba(15, 23, 42, 0.04);
+            --glass-border: rgba(15, 23, 42, 0.08);
+            --star-color: rgba(15, 23, 42, 0.2);
+            --trail-color: 15, 23, 42;
+            --btn-bg: #0f172a;
+            --btn-text: #ffffff;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        #bgCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+        }
+
+
+        #trailCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+
+        .navbar {
+            background: rgba(4, 5, 14, 0.4);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 15px 0;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            background: linear-gradient(45deg, #00f2fe, #a855f7);
+
+            -webkit-background-clip: text;
+            background-clip: text;
+          
+
+            -webkit-text-fill-color: transparent;
+            transition: none;
+          
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--text-muted) !important;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin: 0 12px;
+            transition: 0.3s ease;
+            position: relative;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: var(--text-main) !important;
+        }
+
+        .navbar-nav .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00f2fe, #a855f7);
+            transition: width 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-control-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 6px 14px;
+            border-radius: 100px;
+            cursor: pointer;
+            margin-left: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: 0.3s ease;
+        }
+
+        .nav-control-btn:hover {
+            border-color: var(--secondary-glow);
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+        }
+
+        .dropdown-menu-custom {
+            background: #0b0d19;
+            border: 1px solid var(--glass-border);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 0 20px;
+        }
+
+
+        .hero-glow-1 {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.25) 0%, transparent 70%);
+            top: 10%;
+            left: 5%;
+            z-index: -1;
+            animation: floatGlow 10s infinite alternate;
+        }
+
+        .hero-glow-2 {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(0, 242, 254, 0.2) 0%, transparent 70%);
+            bottom: 10%;
+            right: 5%;
+            z-index: -1;
+            animation: floatGlow 14s infinite alternate-reverse;
+        }
+
+        @keyframes floatGlow {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                transform: translate(30px, -40px) scale(1.15);
+            }
+        }
+
+
+        .hero-badge {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            padding: 8px 20px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--secondary-glow);
+            display: inline-block;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            box-shadow: inset 0 0 10px rgba(0, 242, 254, 0.1);
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 7vw, 5.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -2px;
+            margin-bottom: 25px;
+        }
+
+        .hero h1 .salom-text {
+            color: var(--text-main);
+            opacity: 0.9;
+        }
+
+        #typing {
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 30%, #a855f7 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            /* Standart variant qo'shildi */
+            -webkit-text-fill-color: transparent;
+            font-family: 'Space Grotesk', sans-serif;
+            position: relative;
+            font-weight: 700;
+            transition: none;
+            /* Miltillashni oldini olish uchun */
+        }
+
+        .hero p {
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            color: var(--text-muted);
+            max-width: 650px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+
+
+        .premium-btn {
+            position: relative;
+            display: inline-block;
+            padding: 16px 45px;
+            font-weight: 700;
+            color: var(--btn-text);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1.5px;
+            background: var(--btn-bg);
+            border-radius: 100px;
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.15);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: none;
+        }
+
+        .premium-btn:hover {
+            transform: translateY(-5px);
+            color: var(--btn-text);
+            box-shadow: 0 15px 35px rgba(0, 242, 254, 0.4), 0 0 15px rgba(168, 85, 247, 0.4);
+        }
+
+
+        .about-section {
+            padding: 120px 0;
+            position: relative;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 60px;
+
+            /* #fff o'rniga asosiy matn rangi o'zgaruvchisi qo'yildi */
+            background: linear-gradient(90deg, var(--text), var(--text-muted));
+
+            -webkit-background-clip: text;
+            background-clip: text;
+            /* Standart variant (brauzerlar mosligi uchun) */
+
+            -webkit-text-fill-color: transparent;
+            transition: none;
+            /* Rejim almashganda gradient miltillamasligi uchun */
+        }
+
+        .info-box {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 45px;
+            height: 100%;
+            transition: 0.4s;
+        }
+
+        .info-box:hover {
+            border-color: rgba(168, 85, 247, 0.3);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+
+        .projects-section {
+            padding: 100px 0;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            padding: 40px 35px;
+            height: 100%;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-12px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(0, 242, 254, 0.3);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+        }
+
+        .card-icon {
+            width: 75px;
+            height: 75px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--secondary-glow);
+            margin-bottom: 25px;
+            transition: 0.3s;
+        }
+
+        .glass-card:hover .card-icon {
+            background: var(--secondary-glow);
+            color: #000;
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 0 25px var(--secondary-glow);
+        }
+
+        .view-btn {
+            padding: 11px 28px;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .glass-card:hover .view-btn {
+            background: var(--text-main);
+            color: var(--bg-color);
+        }
+
+
+        .footer {
+            background: #020308;
+            border-top: 1px solid var(--glass-border);
+            padding: 80px 0 40px;
+            text-align: center;
+        }
+
+        .footer-socials a {
+            color: var(--text-muted);
+            font-size: 1.6rem;
+            margin: 0 18px;
+            transition: 0.3s ease;
+            display: inline-block;
+        }
+
+        .footer-socials a:hover {
+            color: var(--secondary-glow);
+            transform: translateY(-4px);
+        }
+
+        .hidden {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="bgCanvas"></canvas>
+
+    <canvas id="trailCanvas"></canvas>
+
+
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">DILNURA.</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto text-center align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="#" data-translate="nav_home">Asosiy</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html" data-translate="nav_about">Men
+                            Haqimda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#projects"
+                            data-translate="nav_projects">Loyihalarim</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html" data-translate="nav_contact">Aloqa</a>
+                    </li>
+
+                    <button class="nav-control-btn" id="themeToggleBtn" onclick="toggleTheme()">
+                        <i class="fas fa-moon"></i>
+                    </button>
+
+                    <div class="dropdown d-inline">
+                        <button class="nav-control-btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-globe me-1"></i> <span id="currentLangLabel">UZ</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark dropdown-menu-custom">
+                            <li><a class="dropdown-item" href="#" onclick="switchLang('uz')">O'zbekcha</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="switchLang('ru')">Русский</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="switchLang('en')">English</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="switchLang('tr')">Türkçe</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="switchLang('ko')">한국어</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="switchLang('kk')">Қазақша</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="switchLang('ky')">Кыргызча</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="switchLang('zh')">中文</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="switchLang('ja')">日本語</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="switchLang('es')">Español</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="switchLang('pt')">Português</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <section class="hero">
+        <div class="hero-glow-1"></div>
+        <div class="hero-glow-2"></div>
+        <div class="container text-center">
+            <div class="hidden show">
+                <div class="avatar-container mb-4">
+                    <img src="https://i.pinimg.com/736x/58/ac/1f/58ac1fb9a6f71cfbf6874b9c7532d88b.jpg" alt="Dilnura"
+                        style="width: 110px; height: 110px; border-radius: 50%; border: 2px solid var(--secondary-glow); box-shadow: 0 0 20px rgba(0, 242, 254, 0.3); object-fit: cover;">
+                </div>
+
+                <h1>
+                    <span class="salom-text" data-translate="hero_title">Salom, Men</span> <br>
+                    <span id="typing"></span>
+                </h1>
+                <p data-translate="hero_desc">Men raqamli olamda eng zamonaviy texnologiyalar bilan chiroyli
+                    interfeyslar, yuqori darajadagi
+                    o'yinlar va veb-ilovalarni mukammal darajada yarataman.</p>
+                <a href="#about" class="premium-btn"><span data-translate="hero_btn">Tanishish</span> <i
+                        class="fas fa-chevron-right ms-2"></i></a>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+    <section id="projects" class="projects-section container">
+        <h2 class="section-title text-center hidden" data-translate="projects_title">Ijodiy Loyihalarim</h2>
+
+        <div class="row g-4 justify-content-center">
+            <div class="col-lg-4 col-md-6 hidden">
+                <div class="glass-card">
+                    <div class="w-100 d-flex flex-column align-items-center">
+                        <div class="card-icon"><i class="fas fa-id-card"></i></div>
+                        <h4>Portfolio.html</h4>
+                        <p data-translate="card1_desc">Siz haqingizdagi ma'lumotlar vizual darajada mukammal taqdim
+                            etiladigan shaxsiy vizitka.</p>
+                    </div>
+                    <a href="portfolio.html" class="view-btn"><span data-translate="btn_view">Ko'rish</span> <i
+                            class="fas fa-arrow-right ms-1"></i></a>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 hidden">
+                <div class="glass-card">
+                    <div class="w-100 d-flex flex-column align-items-center">
+                        <div class="card-icon"><i class="fas fa-shopping-basket"></i></div>
+                        <h4>Ovqat.html</h4>
+                        <p data-translate="card2_desc">Savatcha, jonli hisob-kitob va ajoyib animatsiyalarga ega mini
+                            onlayn do'kon.</p>
+                    </div>
+                    <a href="shop.html" class="view-btn"><span data-translate="btn_shop">Do'konga o'tish</span> <i
+                            class="fas fa-shopping-cart ms-1"></i></a>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 hidden">
+                <div class="glass-card">
+                    <div class="w-100 d-flex flex-column align-items-center">
+                        <div class="card-icon"><i class="fas fa-headset"></i></div>
+                        <h4>Games.html</h4>
+                        <p data-translate="card3_desc">Foydalanuvchini o'ziga jalb qiluvchi qiziqarli mini o'yinlar
+                            jamlanmasi.</p>
+                    </div>
+                    <a href="games.html" class="view-btn"><span data-translate="btn_play">O'ynash</span> <i
+                            class="fas fa-gamepad ms-1"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <footer class="footer" id="contact">
+        <div class="container">
+            <h3 class="mb-2" style="font-family: 'Space Grotesk', sans-serif; font-weight: 700;"
+                data-translate="footer_title">Men bilan bog'lanish</h3>
+            <p style="color: var(--text-muted); max-width: 500px; margin: 0 auto 30px;" data-translate="footer_desc">
+                Goya va loyihalaringizni
+                reallikka aylantirishga tayyorman. Menga yozing!</p>
+            <div class="footer-socials my-4">
+                <a href="#"><i class="fab fa-telegram"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a>
+            </div>
+            <hr style="border-color: var(--glass-border); max-width: 300px; margin: 40px auto;">
+            <p style="font-size: 0.85rem; color: #4b5563;">© 2026 Dilnura Portfolio. <span
+                    data-translate="footer_rights">Barcha huquqlar himoyalangan.</span></p>
+        </div>
+    </footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+
+        const dictionary = {
+            uz: {
+                nav_home: "Asosiy", nav_about: "Men Haqimda", nav_projects: "Loyihalarim", nav_contact: "Aloqa",
+                hero_title: "Salom, Men",
+                hero_desc: "Men raqamli olamda eng zamonaviy texnologiyalar bilan chiroyli interfeyslar, yuqori darajadagi o'yinlar va veb-ilovalarni mukammal darajada yarataman.",
+                hero_btn: "Tanishish", projects_title: "Ijodiy Loyihalarim",
+                card1_desc: "Siz haqingizdagi ma'lumotlar vizual darajada mukammal taqdim etiladigan shaxsiy vizitka.",
+                card2_desc: "Savatcha, jonli hisob-kitob va ajoyib animatsiyalarga ega mini onlayn do'kon.",
+                card3_desc: "Foydalanuvchini o'ziga jalb qiluvchi qiziqarli mini o'yinlar jamlanmasi.",
+                btn_view: "Ko'rish", btn_shop: "Do'konga o'tish", btn_play: "O'ynash",
+                footer_title: "Men bilan bog'lanish",
+                footer_desc: "Goya va loyihalaringizni reallikka aylantirishga tayyorman. Menga yozing!",
+                footer_rights: "Barcha huquqlar himoyalangan.",
+                typing: ["Dilnura Qadamboyeva", "Veb Developer", "UI/UX Designer"]
+            },
+            ru: {
+                nav_home: "Главная", nav_about: "Обо мне", nav_projects: "Проекты", nav_contact: "Контакты",
+                hero_title: "Привет, Я",
+                hero_desc: "Я создаю красивые интерфейсы, высококлассные игры и веб-приложения на высшем уровне с использованием самых современных цифровых технологий.",
+                hero_btn: "Знакомство", projects_title: "Творческие Проекты",
+                card1_desc: "Персональная визитка, где ваша информация представлена визуально безупречно.",
+                card2_desc: "Мини-интернет-магазин с корзиной, живым подсчетом и потрясающей анимацией.",
+                card3_desc: "Увлекательная коллекция мини-игр, разработанная для привлечения пользователей.",
+                btn_view: "Смотреть", btn_shop: "В магазин", btn_play: "Играть",
+                footer_title: "Связаться со мной",
+                footer_desc: "Я готова превратить ваши идеи и проекты в реальность. Напишите мне!",
+                footer_rights: "Все права защищены.",
+                typing: ["Дильнура Кадамбоева", "Веб-Разработчик", "UI/UX Дизайнер"]
+            },
+            en: {
+                nav_home: "Home", nav_about: "About Me", nav_projects: "Projects", nav_contact: "Contact",
+                hero_title: "Hello, I am",
+                hero_desc: "I create beautiful interfaces, high-level games, and web applications perfectly with the most modern technologies in the digital world.",
+                hero_btn: "Discover", projects_title: "Creative Projects",
+                card1_desc: "A personal digital card where your information is visually presented in a perfect way.",
+                card2_desc: "A mini online store featuring a live shopping cart, real-time calculation, and cool animations.",
+                card3_desc: "An engaging collection of mini-games designed to captivate users.",
+                btn_view: "View", btn_shop: "Go to Shop", btn_play: "Play Game",
+                footer_title: "Contact Me",
+                footer_desc: "I am ready to turn your ideas and projects into reality. Write to me!",
+                footer_rights: "All rights reserved.",
+                typing: ["Dilnura Qadamboyeva", "Web Developer", "UI/UX Designer"]
+            },
+            tr: {
+                nav_home: "Anasayfa", nav_about: "Hakkımda", nav_projects: "Projelerim", nav_contact: "İletişim",
+                hero_title: "Merhaba, Ben",
+                hero_desc: "Dijital dünyada en modern teknolojileri kullanarak harika arayüzler, üst düzey oyunlar ve web uygulamaları geliştiriyorum.",
+                hero_btn: "Keşfet", projects_title: "Yaratıcı Projelerim",
+                card1_desc: "Bilgilerinizin görsel olarak kusursuz bir şekilde sunulduğu kişisel dijital kartvizit.",
+                card2_desc: "Sepet, canlı hesaplama ve harika animasyonlara sahip mini bir online mağaza.",
+                card3_desc: "Kullanıcıları kendine çeken eğlenceli mini oyunlar koleksiyonu.",
+                btn_view: "Görüntüle", btn_shop: "Mağazaya Git", btn_play: "Oyna",
+                footer_title: "Benimle İletişime Geçin",
+                footer_desc: "Fikirlerinizi ve projelerinizi gerçeğe dönüştürmeye hazırım. Bana yazın!",
+                footer_rights: "Tüm hakları saklıdır.",
+                typing: ["Dilnura Qadamboyeva", "Web Geliştirici", "UI/UX Tasarımcı"]
+            },
+            ko: {
+                nav_home: "홈", nav_about: "소개", nav_projects: "프로젝트", nav_contact: "연락처",
+                hero_title: "안녕하세요, 저는",
+                hero_desc: "디지털 세계에서 가장 현대적인 기술을 활용하여 아름다운 인터페이스, 고품질 게임 및 웹 애플리케이션을 완벽하게 제작합니다.",
+                hero_btn: "둘러보기", projects_title: "창의적인 프로젝트",
+                card1_desc: "귀하의 정보가 시각적으로 완벽하게 표현되는 개인 디지털 명함입니다.",
+                card2_desc: "장바구니, 실시간 계산 및 멋진 애니메이션이 포함된 미니 온라인 쇼핑몰입니다.",
+                card3_desc: "사용자를 사로잡기 위해 설계된 흥미로운 미니 게임 모음입니다.",
+                btn_view: "보기", btn_shop: "상점으로 이동", btn_play: "게임하기",
+                footer_title: "문의하기",
+                footer_desc: "당신의 아이디어와 프로젝트를 현실로 만들 준비가 되어 있습니다. 저에게 메시지를 보내주세요!",
+                footer_rights: "모든 권리 보유.",
+                typing: ["딜누라 카담보에바", "웹 개발자", "UI/UX 디자이너"]
+            },
+            kk: {
+                nav_home: "Басты бет", nav_about: "Мен туралы", nav_projects: "Жобаларым", nav_contact: "Байланыс",
+                hero_title: "Сәлем, Мен",
+                hero_desc: "Мен цифрлық әлемдегі ең заманауи технологиялармен әдемі интерфейстерді, жоғары деңгейлі ойындар мен веб-қосымшаларды тамаша деңгейде жасаймын.",
+                hero_btn: "Танысу", projects_title: "Шығармашылық Жобаларым",
+                card1_desc: "Сіз туралы ақпарат визуалды түрде мінсіз ұсынылатын жеке цифрлық визитка.",
+                card2_desc: "Себеті, жанды есептеуі және тамаша анимациялары бар шағын онлайн дүкен.",
+                card3_desc: "Пайдаланушыларды қызықтыратын шағын ойындардың тамаша жиынтығы.",
+                btn_view: "Көру", btn_shop: "Дүкенге өту", btn_play: "Ойнау",
+                footer_title: "Менімен байланысу",
+                footer_desc: "Идеяларыңыз бен жобаларыңызды шындыққа айналдыруға дайынмын. Маған жазыңыз!",
+                footer_rights: "Барлық құқықтар қорғалған.",
+                typing: ["Дильнура Кадамбоева", "Веб-Әзірлеуші", "UI/UX Дизайнер"]
+            },
+            ky: {
+                nav_home: "Башкы бет", nav_about: "Мен жөнүндө", nav_projects: "Долбоорлорум", nav_contact: "Байланышуу",
+                hero_title: "Салам, Мен",
+                hero_desc: "Мен санариптик дүйнөдө эң заманбап технологиялар менен кооз интерфейстерди, жогорку деңгээлдеги оюндарды жана веб-тиркемелерди кемчиликсиз жаратам.",
+                hero_btn: "Таанышуу", projects_title: "Чыгармачылык Долбоорлорум",
+                card1_desc: "Сиз жөнүндө маалымат визуалдык түрдө кемчиликсиз көрсөтүлгөн жеке санариптик визитка.",
+                card2_desc: "Корзинасы, жандуу эсеби жана сонун анимациялары бар чакан онлайн дүкөн.",
+                card3_desc: "Колдонуучуларды өзүнө тарткан кызыктуу мини-оюндардын топтому.",
+                btn_view: "Көрүү", btn_shop: "Дүкөнгө өтүү", btn_play: "Ойноо",
+                footer_title: "Мени менен байланышуу",
+                footer_desc: "Идеяларыңызды жана долбоорлоруңузду реалдуулукка айландырууга даярмын. Маған жазыңыз!",
+                footer_rights: "Бардык укуктар корголгон.",
+                typing: ["Дильнура Кадамбоева", "Веб-Иштеп Чыгуучу", "UI/UX Дизайнер"]
+            },
+            zh: {
+                nav_home: "首页", nav_about: "关于我", nav_projects: "我的项目", nav_contact: "联系我",
+                hero_title: "你好，我是",
+                hero_desc: "我利用数字世界中最现代的技术，完美地打造精美的界面、高级游戏和网页应用程序。",
+                hero_btn: "了解更多", projects_title: "创意项目",
+                card1_desc: "一个完美展示个人信息的数字化个人名片。",
+                card2_desc: "一个包含购物车、实时计算和精美动画的微型在线商店。",
+                card3_desc: "一个旨在吸引用户参与的趣味微型游戏合集。",
+                btn_view: "查看", btn_shop: "前往商店", btn_play: "开始游戏",
+                footer_title: "联系我",
+                footer_desc: "我已准备好将您的想法和项目变为现实。请给我写信！",
+                footer_rights: "版权所有，保留所有权利。",
+                typing: ["Dilnura Qadamboyeva", "网页开发人员", "UI/UX 设计师"]
+            },
+            ja: {
+                nav_home: "ホーム", nav_about: "私について", nav_projects: "プロジェクト", nav_contact: "お問い合わせ",
+                hero_title: "こんにちは、私は",
+                hero_desc: "デジタル世界において最先端の技術を駆使し、美しいインターフェース、ハイレベルなゲーム、そしてウェブアプリケーションを完璧に構築します。",
+                hero_btn: "詳しく知る", projects_title: "クリエイティブプロジェクト",
+                card1_desc: "あなたの情報が視覚的に完璧な形で提示されるパーショナルデジタル名片。",
+                card2_desc: "カート、リアルタイム計算、そしてクールなアニメーションを備えたミニオンラインショップ。",
+                card3_desc: "ユーザーを魅了するために設計された楽しいミニゲームコレクション。",
+                btn_view: "見る", btn_shop: "ショップへ", btn_play: "プレイする",
+                footer_title: "お問い合わせ",
+                footer_desc: "あなたのアイデアやプロジェクトを現実に変える準備ができています。お気軽にご連絡ください！",
+                footer_rights: "All rights reserved.",
+                typing: ["ディルヌラ・カダムボエヴァ", "Webデベロッパー", "UI/UXデザイナー"]
+            },
+            es: {
+                nav_home: "Inicio", nav_about: "Sobre Mí", nav_projects: "Proyectos", nav_contact: "Contacto",
+                hero_title: "Hola, Soy",
+                hero_desc: "Creo hermosas interfaces, juegos de alto nivel y aplicaciones web a la perfección con las tecnologías más modernas del mundo digital.",
+                hero_btn: "Descubrir", projects_title: "Proyectos Creativos",
+                card1_desc: "Una tarjeta digital personal donde tu información se presenta visualmente de forma perfecta.",
+                card2_desc: "Una mini tienda en línea con carrito de compras, cálculo en vivo y excelentes animaciones.",
+                card3_desc: "Una atractiva colección de minijuegos diseñados para cautivar a los usuarios.",
+                btn_view: "Ver", btn_shop: "Ir a la tienda", btn_play: "Jugar",
+                footer_title: "Contactar Conmigo",
+                footer_desc: "Estoy lista para convertir tus ideas y proyectos en realidad. ¡Escríbeme!",
+                footer_rights: "Todos los derechos reservados.",
+                typing: ["Dilnura Qadamboyeva", "Desarrollador Web", "Diseñador UI/UX"]
+            },
+            pt: {
+                nav_home: "Início", nav_about: "Sobre Mim", nav_projects: "Projetos", nav_contact: "Contato",
+                hero_title: "Olá, Eu sou",
+                hero_desc: "Crio belas interfaces, jogos de alto nível e aplicativos web perfeitamente com as tecnologias mais modernas do mundo digital.",
+                hero_btn: "Descobrir", projects_title: "Projetos Criativos",
+                card1_desc: "Um cartão digital pessoal onde suas informações são apresentadas visualmente de forma perfeita.",
+                card2_desc: "Uma mini loja online com carrinho, cálculo em tempo real e ótimas animações.",
+                card3_desc: "Uma coleção envolvente de mini-jogos projetada para cativar os usuários.",
+                btn_view: "Visualizar", btn_shop: "Ir para a Loja", btn_play: "Jogar",
+                footer_title: "Entre em Contato",
+                footer_desc: "Estou pronta para transformar suas ideias e projetos em realidade. Escreva para mim!",
+                footer_rights: "Todos os direitos reservados.",
+                typing: ["Dilnura Qadamboyeva", "Desenvolvedor Web", "Designer UI/UX"]
+            }
+        };
+
+        let activeLang = "uz";
+        let words = dictionary[activeLang].typing;
+
+        function switchLang(lang) {
+            activeLang = lang;
+            words = dictionary[lang].typing;
+            document.getElementById('currentLangLabel').innerText = lang.toUpperCase();
+
+            document.querySelectorAll('[data-translate]').forEach(el => {
+                const key = el.getAttribute('data-translate');
+                if (dictionary[lang][key]) {
+                    el.innerText = dictionary[lang][key];
+                }
+            });
+
+            wordIndex = 0;
+            charIndex = 0;
+            isDeleting = false;
+        }
+
+
+        let wordIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        function typeEffect() {
+            const currentWord = words[wordIndex];
+            const typingElement = document.getElementById("typing");
+
+            if (isDeleting) {
+                typingElement.innerHTML = currentWord.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typingElement.innerHTML = currentWord.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            let speed = isDeleting ? 70 : 130;
+
+            if (!isDeleting && charIndex === currentWord.length) {
+                speed = 1800;
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                wordIndex = (wordIndex + 1) % words.length;
+                speed = 400;
+            }
+
+            setTimeout(typeEffect, speed);
+        }
+        document.addEventListener("DOMContentLoaded", typeEffect);
+
+
+
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('themeToggleBtn').querySelector('i');
+            body.classList.toggle('light-mode');
+
+            if (body.classList.contains('light-mode')) {
+                icon.className = 'fas fa-sun';
+            } else {
+                icon.className = 'fas fa-moon';
+            }
+        }
+
+
+
+        const canvas = document.getElementById("bgCanvas");
+        const ctx = canvas.getContext("2d");
+
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        const numStars = 120;
+        const stars = [];
+
+        for (let i = 0; i < numStars; i++) {
+            stars.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                r: Math.random() * 1.2 + 0.4,
+                speedY: Math.random() * 0.3 + 0.1
+            });
+        }
+
+        function drawStars() {
+            ctx.clearRect(0, 0, width, height);
+
+            let isLight = document.body.classList.contains('light-mode');
+
+            if (isLight) {
+                ctx.fillStyle = "#f1f5f9";
+                ctx.fillRect(0, 0, width, height);
+            } else {
+                let grad = ctx.createLinearGradient(0, 0, 0, height);
+                grad.addColorStop(0, "#04050e");
+                grad.addColorStop(1, "#0a0c27");
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, width, height);
+            }
+
+            ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--star-color');
+            for (let i = 0; i < numStars; i++) {
+                let s = stars[i];
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                ctx.fill();
+
+                s.y += s.speedY;
+                if (s.y > height) {
+                    s.y = 0;
+                    s.x = Math.random() * width;
+                }
+            }
+            requestAnimationFrame(drawStars);
+        }
+        drawStars();
+
+
+
+        const trailCanvas = document.getElementById("trailCanvas");
+        const tCtx = trailCanvas.getContext("2d");
+
+        trailCanvas.width = window.innerWidth;
+        trailCanvas.height = window.innerHeight;
+
+        let particles = [];
+
+        window.addEventListener('mousemove', (e) => {
+            for (let i = 0; i < 2; i++) {
+                particles.push({
+                    x: e.clientX,
+                    y: e.clientY,
+                    size: Math.random() * 2.5 + 1,
+                    alpha: 1,
+                    speedX: (Math.random() - 0.5) * 1.2,
+                    speedY: (Math.random() - 0.5) * 1.2
+                });
+            }
+        });
+
+        function drawTrail() {
+            tCtx.clearRect(0, 0, trailCanvas.width, trailCanvas.height);
+            let colorHex = getComputedStyle(document.documentElement).getPropertyValue('--trail-color').trim();
+
+            for (let i = 0; i < particles.length; i++) {
+                let p = particles[i];
+                tCtx.fillStyle = `rgba(${colorHex}, ${p.alpha})`;
+                tCtx.beginPath();
+                tCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                tCtx.fill();
+
+                p.x += p.speedX;
+                p.y += p.speedY;
+                p.alpha -= 0.025;
+
+                if (p.alpha <= 0) {
+                    particles.splice(i, 1);
+                    i--;
+                }
+            }
+            requestAnimationFrame(drawTrail);
+        }
+        drawTrail();
+
+
+        window.addEventListener("resize", () => {
+            width = canvas.width = trailCanvas.width = window.innerWidth;
+            height = canvas.height = trailCanvas.height = window.innerHeight;
+        });
+
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("show");
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll(".hidden").forEach(el => observer.observe(el));
+    </script>
+</body>
+
+</html>

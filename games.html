@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Hub | Futuristic Arcade Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-glow: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #09090b 100%);
+            --panel-bg: rgba(15, 23, 42, 0.65);
+            --border-glow: rgba(99, 102, 241, 0.25);
+            --text-main: #f8fafc;
+            --text-neon: #818cf8;
+            --accent-cyan: #06b6d4;
+            --accent-pink: #ec4899;
+            --accent-green: #10b981;
+        }
+
+        [data-theme="light"] {
+            --bg-glow: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%);
+            --panel-bg: rgba(255, 255, 255, 0.75);
+            --border-glow: rgba(99, 102, 241, 0.15);
+            --text-main: #0f172a;
+            --text-neon: #4f46e5;
+            --accent-cyan: #0891b2;
+            --accent-pink: #db2777;
+            --accent-green: #059669;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+        }
+
+        body {
+            background: var(--bg-glow);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background 0.5s ease;
+        }
+
+        header {
+            background: var(--panel-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 2px solid var(--border-glow);
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, var(--text-neon), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(129, 140, 248, 0.4);
+        }
+
+        .back-btn {
+            color: var(--text-main);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.05);
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: 1px solid var(--border-glow);
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--text-neon);
+            color: #fff;
+            box-shadow: 0 0 15px var(--text-neon);
+        }
+
+        .theme-toggle {
+            background: transparent;
+            color: var(--text-neon);
+            border: 2px solid var(--border-glow);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            box-shadow: 0 0 15px var(--text-neon);
+            background: var(--text-neon);
+            color: white;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 60px auto;
+            padding: 0 30px;
+        }
+
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .welcome-section h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #fff 30%, var(--text-neon));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        [data-theme="light"] .welcome-section h1 {
+            background: linear-gradient(135deg, #0f172a 30%, var(--text-neon));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 35px;
+        }
+
+        .card {
+            background: var(--panel-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glow);
+            border-radius: 24px;
+            padding: 40px 30px;
+            text-align: center;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--text-neon);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15), inset 0 0 20px rgba(99, 102, 241, 0.1);
+        }
+
+        .card .icon-wrapper {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            background: rgba(255,255,255,0.02);
+            border: 2px solid var(--border-glow);
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover .icon-wrapper {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .card p {
+            color: #94a3b8;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        [data-theme="light"] .card p {
+            color: #475569;
+        }
+
+        .play-hint {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            color: var(--text-neon);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* FUTURISTIC MODAL SYSTEM */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: rgba(15, 23, 42, 0.95);
+            border: 2px solid var(--text-neon);
+            padding: 35px;
+            border-radius: 32px;
+            max-width: 500px;
+            width: 92%;
+            position: relative;
+            box-shadow: 0 0 50px rgba(99, 102, 241, 0.3);
+            text-align: center;
+            transform: scale(0.8);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #64748b;
+            transition: color 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: var(--accent-pink);
+        }
+
+        .modal-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .score-box {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            color: var(--accent-cyan);
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+        }
+
+        canvas {
+            background: #020617;
+            border-radius: 20px;
+            display: block;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.05);
+        }
+
+        .start-action-btn {
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(90deg, var(--text-neon), var(--accent-cyan));
+            color: #fff;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .start-action-btn:hover {
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.6);
+            transform: translateY(-2px);
+        }
+
+       
+        .calc-wrapper {
+            width: 100%;
+            max-width: 340px;
+            margin: 0 auto;
+            background: #020617;
+            padding: 25px;
+            border-radius: 28px;
+            border: 1px solid var(--border-glow);
+        }
+
+        .calc-screen {
+            width: 100%;
+            height: 70px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border-glow);
+            border-radius: 16px;
+            text-align: right;
+            padding: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: var(--accent-cyan);
+            margin-bottom: 25px;
+            box-shadow: inset 0 4px 10px rgba(0,0,0,0.4);
+        }
+
+        .calc-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+
+        .calc-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255,255,255,0.05);
+            height: 60px;
+            border-radius: 16px;
+            font-size: 1.4rem;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .calc-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: var(--text-neon);
+        }
+
+        .calc-btn.op {
+            color: var(--accent-pink);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .calc-btn.eq {
+            background: linear-gradient(135deg, var(--text-neon), var(--accent-cyan));
+            color: #fff;
+            border: none;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="back-btn"><i class="fa-solid fa-gamepad"></i> ARCADE CENTRAL</a>
+            <div class="logo-title">SMART HUB PRO</div>
+            <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn"><i class="fa-solid fa-sun"></i></button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="welcome-section">
+            <h1>CHOOSE YOUR UNIVERSE</h1>
+            <p>Premium darajadagi mini o'yinlar va raqamli xizmatlar portali</p>
+        </div>
+
+        <div class="grid">
+            <div class="card" onclick="openModal('raceModal')">
+                <div class="icon-wrapper" style="color: var(--accent-pink); box-shadow: 0 0 20px rgba(236,72,153,0.2);"><i class="fa-solid fa-car-burst"></i></div>
+                <h3>Nitro Racing 2D</h3>
+                <p>Kiberpank uslubidagi poyga. Chap/o'ng kursorlar orqali harakatlanib, to'qnashuvlardan qoching.</p>
+                <div class="play-hint">LAUNCH GAME <i class="fa-solid fa-arrow-right"></i></div>
+            </div>
+            <div class="card" onclick="openModal('marioModal')">
+                <div class="icon-wrapper" style="color: var(--accent-green); box-shadow: 0 0 20px rgba(16,185,129,0.2);"><i class="fa-solid fa-bolt"></i></div>
+                <h3>Neon Jump</h3>
+                <p>Cheksiz kiber-bo'shliq bo'ylab sakrash. Space yoki ArrowUp tugmasini vaqtida bosing.</p>
+                <div class="play-hint">LAUNCH GAME <i class="fa-solid fa-arrow-right"></i></div>
+            </div>
+            <div class="card" onclick="openModal('cookModal')">
+                <div class="icon-wrapper" style="color: #eab308; box-shadow: 0 0 20px rgba(234,179,8,0.2);"><i class="fa-solid fa-basket-shopping"></i></div>
+                <h3>Cyber Chef 2.0</h3>
+                <p>Yuqoridan tushayotgan neon energiyalarni platforma orqali vaqtida tutib qoling.</p>
+                <div class="play-hint">LAUNCH GAME <i class="fa-solid fa-arrow-right"></i></div>
+            </div>
+            <div class="card" onclick="openModal('tetrisModal')">
+                <div class="icon-wrapper" style="color: #a855f7; box-shadow: 0 0 20px rgba(168,85,247,0.2);"><i class="fa-solid fa-cubes"></i></div>
+                <h3>Neon Tetris</h3>
+                <p>Retro o'yinning mutlaqo yangicha kiber ko'rinishi. Bloklarni terib chiziqlarni yo'qoting.</p>
+                <div class="play-hint">LAUNCH GAME <i class="fa-solid fa-arrow-right"></i></div>
+            </div>
+            <div class="card" onclick="openModal('calcModal')">
+                <div class="icon-wrapper" style="color: var(--accent-cyan); box-shadow: 0 0 20px rgba(6,182,212,0.2);"><i class="fa-solid fa-calculator"></i></div>
+                <h3>Quantum Calculator</h3>
+                <p>Murakkab mantiqiy algoritmlar bilan ishlaydigan futuristik va tezkor kalkulyator xizmati.</p>
+                <div class="play-hint">OPEN CALCULATOR <i class="fa-solid fa-arrow-right"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="raceModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('raceModal')">&times;</span>
+            <div class="modal-title"><i class="fa-solid fa-car-burst"></i> NITRO RACING</div>
+            <div class="score-box">DISTANCE: <span id="raceScore">0</span> KM</div>
+            <canvas id="raceCanvas" width="340" height="420"></canvas>
+            <button class="start-action-btn" onclick="startRaceGame()">IGNITION / START</button>
+        </div>
+    </div>
+
+    <div class="modal" id="marioModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('marioModal')">&times;</span>
+            <div class="modal-title"><i class="fa-solid fa-bolt"></i> NEON JUMP</div>
+            <div class="score-box">SCORE: <span id="marioScore">0</span></div>
+            <canvas id="marioCanvas" width="340" height="420"></canvas>
+            <button class="start-action-btn" onclick="startMarioGame()">BOOT / START</button>
+        </div>
+    </div>
+
+    <div class="modal" id="cookModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('cookModal')">&times;</span>
+            <div class="modal-title"><i class="fa-solid fa-basket-shopping"></i> CYBER CHEF</div>
+            <div class="score-box">ENERGY: <span id="cookScore">0</span> / 100</div>
+            <canvas id="cookCanvas" width="340" height="420"></canvas>
+            <button class="start-action-btn" onclick="startCookingGame()">INITIALIZE SYSTEM</button>
+        </div>
+    </div>
+
+    <div class="modal" id="tetrisModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('tetrisModal')">&times;</span>
+            <div class="modal-title"><i class="fa-solid fa-cubes"></i> NEON TETRIS</div>
+            <div class="score-box">MATRIX SCORE: <span id="tetrisScore">0</span></div>
+            <canvas id="tetrisCanvas" width="240" height="420"></canvas>
+            <button class="start-action-btn" onclick="startTetrisGame()">LOAD MATRIX</button>
+        </div>
+    </div>
+
+    <div class="modal" id="calcModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('calcModal')">&times;</span>
+            <div class="modal-title"><i class="fa-solid fa-calculator"></i> QUANTUM CORE</div>
+            <div class="calc-wrapper">
+                <input type="text" class="calc-screen" id="calcScreen" readonly value="0">
+                <div class="calc-buttons">
+                    <button class="calc-btn op" onclick="clearCalc()">C</button>
+                    <button class="calc-btn op" onclick="pressCalc('/')">/</button>
+                    <button class="calc-btn op" onclick="pressCalc('*')">×</button>
+                    <button class="calc-btn op" onclick="pressCalc('-')">-</button>
+                    <button class="calc-btn" onclick="pressCalc('7')">7</button>
+                    <button class="calc-btn" onclick="pressCalc('8')">8</button>
+                    <button class="calc-btn" onclick="pressCalc('9')">9</button>
+                    <button class="calc-btn op" onclick="pressCalc('+')">+</button>
+                    <button class="calc-btn" onclick="pressCalc('4')">4</button>
+                    <button class="calc-btn" onclick="pressCalc('5')">5</button>
+                    <button class="calc-btn" onclick="pressCalc('6')">6</button>
+                    <button class="calc-btn eq" style="grid-row: span 2; height: 134px;" onclick="solveCalc()">=</button>
+                    <button class="calc-btn" onclick="pressCalc('1')">1</button>
+                    <button class="calc-btn" onclick="pressCalc('2')">2</button>
+                    <button class="calc-btn" onclick="pressCalc('3')">3</button>
+                    <button class="calc-btn" style="grid-column: span 3;" onclick="pressCalc('0')">0</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme Engine
+        document.body.setAttribute('data-theme', 'dark');
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.getElementById('themeBtn');
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.setAttribute('data-theme', 'light');
+                btn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                btn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+            }
+        }
+
+        // Modal Engine with smooth classes
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            modal.style.display = "flex";
+            setTimeout(() => modal.classList.add('active'), 10);
+        }
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.display = "none", 400);
+            
+            cancelAnimationFrame(raceAnim); isRaceRunning = false;
+            cancelAnimationFrame(marioAnim); isMarioRunning = false;
+            cancelAnimationFrame(cookAnim); isCookingRunning = false;
+            clearInterval(tetrisInterval); isTetrisRunning = false;
+        }
+
+        // Page Scroll Freeze during gameplay
+        window.addEventListener("keydown", (e) => {
+            if(["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.code)) {
+                if(isRaceRunning || isMarioRunning || isCookingRunning || isTetrisRunning) e.preventDefault();
+            }
+        });
+
+        // --- QUANTUM CALCULATOR ---
+        let calcScr = document.getElementById('calcScreen');
+        function pressCalc(val) {
+            if (calcScr.value === "0" || calcScr.value === "ERROR") calcScr.value = val;
+            else calcScr.value += val;
+        }
+        function clearCalc() { calcScr.value = "0"; }
+        function solveCalc() {
+            try {
+                let sanitized = calcScr.value.replace(/[^0-9+\-*/.]/g, '');
+                let res = new Function('return ' + sanitized)();
+                calcScr.value = res !== undefined ? Number(res.toFixed(4)) : "ERROR";
+            } catch { calcScr.value = "ERROR"; }
+        }
+
+        // --- GAME 1: NITRO RACING (SMOOTH STEERING) ---
+        const rCanvas = document.getElementById('raceCanvas'); const rCtx = rCanvas.getContext('2d');
+        let raceAnim, playerX, playerTargetX, enemies, raceScore, isRaceRunning = false, raceSpeed;
+
+        function startRaceGame() {
+            if (isRaceRunning) return; isRaceRunning = true;
+            playerX = 145; playerTargetX = 145; raceSpeed = 5; raceScore = 0;
+            enemies = [{ x: Math.random() * 200 + 50, y: -100, speedX: (Math.random() - 0.5) * 2, color: '#ec4899' }];
+            document.getElementById('raceScore').textContent = raceScore;
+            updateRace();
+        }
+        document.addEventListener('keydown', (e) => {
+            if (!isRaceRunning) return;
+            if (e.key === "ArrowLeft") playerTargetX = Math.max(50, playerX - 70);
+            if (e.key === "ArrowRight") playerTargetX = Math.min(240, playerX + 70);
+        });
+
+        function updateRace() {
+            if (!isRaceRunning) return;
+            rCtx.fillStyle = "#020617"; rCtx.fillRect(0, 0, 340, 420);
+            
+            // Smooth movement physics
+            playerX += (playerTargetX - playerX) * 0.25;
+
+            // Cyber Track Drawing
+            rCtx.strokeStyle = "rgba(99, 102, 241, 0.4)"; rCtx.lineWidth = 4;
+            rCtx.beginPath(); rCtx.moveTo(45, 0); rCtx.lineTo(45, 420); rCtx.moveTo(295, 0); rCtx.lineTo(295, 420); rCtx.stroke();
+
+            // Scrolling Road Lines
+            rCtx.fillStyle = "rgba(6, 182, 212, 0.3)";
+            for (let i = 0; i < 420; i += 60) {
+                rCtx.fillRect(168, (i + (raceScore * 5) % 60), 4, 30);
+            }
+
+            // Player neon asset
+            rCtx.shadowBlur = 15; rCtx.shadowColor = "#06b6d4";
+            rCtx.fillStyle = "#06b6d4"; rCtx.fillRect(playerX, 320, 45, 70);
+            rCtx.fillStyle = "#fff"; rCtx.fillRect(playerX + 8, 330, 8, 12); rCtx.fillRect(playerX + 28, 330, 8, 12);
+
+            // Enemies logic
+            enemies.forEach(enemy => {
+                enemy.y += raceSpeed;
+                enemy.x += enemy.speedX;
+                if(enemy.x < 50 || enemy.x > 240) enemy.speedX *= -1;
+
+                rCtx.shadowColor = enemy.color; rCtx.fillStyle = enemy.color;
+                rCtx.fillRect(enemy.x, enemy.y, 45, 70);
+
+                // Collision detection bounds
+                if (enemy.y + 70 > 320 && enemy.y < 390 && Math.abs(enemy.x - playerX) < 40) {
+                    isRaceRunning = false;
+                    setTimeout(() => alert("CRASH DETECTED! Total distance: " + raceScore + " KM"), 50);
+                }
+            });
+            rCtx.shadowBlur = 0;
+
+            if (enemies[0].y > 420) {
+                enemies[0] = { 
+                    x: Math.random() * 190 + 50, 
+                    y: -100, 
+                    speedX: (Math.random() - 0.5) * 3,
+                    color: Math.random() > 0.5 ? '#ec4899' : '#a855f7' 
+                };
+                raceScore += 10; raceSpeed += 0.4;
+                document.getElementById('raceScore').textContent = raceScore;
+            }
+            raceAnim = requestAnimationFrame(updateRace);
+        }
+
+        // --- GAME 2: NEON JUMP (SMOOTH PHYSICS) ---
+        const mCanvas = document.getElementById('marioCanvas'); const mCtx = mCanvas.getContext('2d');
+        let marioAnim, marioY, mVelocity, isJump, obsX, mScore, isMarioRunning = false, obsSpeed;
+
+        function startMarioGame() {
+            if (isMarioRunning) return; isMarioRunning = true;
+            marioY = 320; mVelocity = 0; isJump = false; obsX = 360; mScore = 0; obsSpeed = 5;
+            document.getElementById('marioScore').textContent = mScore;
+            updateMario();
+        }
+        document.addEventListener('keydown', (e) => {
+            if ((e.code === "Space" || e.code === "ArrowUp") && !isJump && isMarioRunning) {
+                mVelocity = -12.5; isJump = true;
+            }
+        });
+
+        function updateMario() {
+            if (!isMarioRunning) return;
+            mCtx.fillStyle = "#020617"; mCtx.fillRect(0, 0, 340, 420);
+            
+            // Ground
+            mCtx.fillStyle = "rgba(16, 185, 129, 0.2)"; mCtx.fillRect(0, 360, 340, 60);
+            mCtx.fillStyle = "#10b981"; mCtx.fillRect(0, 360, 340, 4);
+
+            // Gravity simulation
+            mVelocity += 0.65; marioY += mVelocity;
+            if (marioY >= 320) { marioY = 320; isJump = false; }
+
+            // Player
+            mCtx.shadowBlur = 20; mCtx.shadowColor = "#10b981";
+            mCtx.fillStyle = "#10b981"; mCtx.fillRect(60, marioY, 30, 40);
+
+            // Obstacle
+            obsX -= obsSpeed;
+            if (obsX < -30) { obsX = 360; mScore++; obsSpeed += 0.35; document.getElementById('marioScore').textContent = mScore; }
+            
+            mCtx.shadowColor = "#ec4899"; mCtx.fillStyle = "#ec4899";
+            mCtx.fillRect(obsX, 325, 22, 35);
+            mCtx.shadowBlur = 0;
+
+            if (obsX < 90 && obsX + 22 > 60 && marioY + 40 > 325) {
+                isMarioRunning = false;
+                setTimeout(() => alert("GRID OVERLOAD! Final Score: " + mScore), 50);
+            }
+            marioAnim = requestAnimationFrame(updateMario);
+        }
+
+        // --- GAME 3: CYBER CHEF (ENERGY CAPTURE) ---
+        const cCanvas = document.getElementById('cookCanvas'); const cCtx = cCanvas.getContext('2d');
+        let cookAnim, basketX, basketTargetX, ingX, ingY, ingColor, cookScore, isCookingRunning = false, fallSpeed;
+
+        function startCookingGame() {
+            if (isCookingRunning) return; isCookingRunning = true;
+            basketX = 140; basketTargetX = 140; ingY = 0; ingX = Math.random() * 280 + 30;
+            ingColor = Math.random() > 0.5 ? '#06b6d4' : '#eab308';
+            cookScore = 0; fallSpeed = 4.5;
+            document.getElementById('cookScore').textContent = cookScore;
+            updateCooking();
+        }
+        document.addEventListener('keydown', (e) => {
+            if (!isCookingRunning) return;
+            if (e.key === "ArrowLeft") basketTargetX = Math.max(10, basketX - 45);
+            if (e.key === "ArrowRight") basketTargetX = Math.min(260, basketX + 45);
+        });
+
+        function updateCooking() {
+            if (!isCookingRunning) return;
+            cCtx.fillStyle = "#020617"; cCtx.fillRect(0, 0, 340, 420);
+            
+            basketX += (basketTargetX - basketX) * 0.3; // Elastic response
+
+            // Falling matrix sphere
+            ingY += fallSpeed;
+            cCtx.shadowBlur = 20; cCtx.shadowColor = ingColor;
+            cCtx.fillStyle = ingColor;
+            cCtx.beginPath(); cCtx.arc(ingX, ingY, 12, 0, Math.PI * 2); cCtx.fill();
+
+            // Neon catching pad
+            cCtx.shadowColor = "#a855f7"; cCtx.fillStyle = "#a855f7";
+            cCtx.fillRect(basketX, 380, 70, 12);
+            cCtx.shadowBlur = 0;
+
+            if (ingY >= 370 && ingY <= 390 && ingX > basketX && ingX < basketX + 70) {
+                cookScore += 10;
+                document.getElementById('cookScore').textContent = cookScore;
+                ingY = 0; ingX = Math.random() * 280 + 30;
+                ingColor = Math.random() > 0.5 ? '#06b6d4' : '#eab308';
+                fallSpeed += 0.4;
+                if (cookScore >= 100) {
+                    isCookingRunning = false;
+                    setTimeout(() => alert("MATRIX SYNC COMPLETE! 100% Energy Generated."), 50);
+                }
+            } else if (ingY > 420) {
+                ingY = 0; ingX = Math.random() * 280 + 30;
+            }
+            cookAnim = requestAnimationFrame(updateCooking);
+        }
+
+        // --- GAME 4: NEON TETRIS ---
+        const tCanvas = document.getElementById('tetrisCanvas'); const tCtx = tCanvas.getContext('2d');
+        const ROW = 20, COL = 12, SQ = 20;
+        let tetrisInterval, board, currentPiece, tScore, isTetrisRunning = false;
+
+        const PIECES = [
+            [[1, 1, 1, 1]], [[1, 1, 1], [0, 1, 0]], [[1, 1, 0], [0, 1, 1]], 
+            [[0, 1, 1], [1, 1, 0]], [[1, 1], [1, 1]], [[1, 1, 1], [1, 0, 0]]
+        ];
+        const COLORS = ["#06b6d4", "#a855f7", "#ec4899", "#10b981", "#eab308", "#3b82f6"];
+
+        function startTetrisGame() {
+            if (isTetrisRunning) return; isTetrisRunning = true;
+            tScore = 0; document.getElementById('tetrisScore').textContent = tScore;
+            board = Array.from({ length: ROW }, () => Array(COL).fill(0));
+            currentPiece = createPiece();
+            clearInterval(tetrisInterval);
+            tetrisInterval = setInterval(updateTetris, 450);
+            drawBoard();
+        }
+
+        function createPiece() {
+            let r = Math.floor(Math.random() * PIECES.length);
+            return { matrix: PIECES[r], color: COLORS[r], x: 4, y: 0 };
+        }
+
+        function drawBoard() {
+            tCtx.fillStyle = "#020617"; tCtx.fillRect(0, 0, 240, 420);
+            for (let r = 0; r < ROW; r++) {
+                for (let c = 0; c < COL; c++) {
+                    if (board[r][c]) drawSquare(c, r, board[r][c]);
+                }
+            }
+            currentPiece.matrix.forEach((row, ri) => {
+                row.forEach((val, ci) => {
+                    if (val) drawSquare(currentPiece.x + ci, currentPiece.y + ri, currentPiece.color);
+                });
+            });
+        }
+
+        function drawSquare(x, y, color) {
+            tCtx.fillStyle = color; tCtx.fillRect(x * SQ, y * SQ, SQ - 1, SQ - 1);
+        }
+
+        function updateTetris() {
+            if (!isTetrisRunning) return;
+            currentPiece.y++;
+            if (checkCollision()) {
+                currentPiece.y--; mergePiece(); clearLines(); currentPiece = createPiece();
+                if (checkCollision()) { 
+                    clearInterval(tetrisInterval); isTetrisRunning = false; 
+                    setTimeout(() => alert("MATRIX STACK OVERFLOW! Score: " + tScore), 50);
+                }
+            }
+            drawBoard();
+        }
+
+        function checkCollision() {
+            for (let r = 0; r < currentPiece.matrix.length; r++) {
+                for (let c = 0; c < currentPiece.matrix[r].length; c++) {
+                    if (!currentPiece.matrix[r][c]) continue;
+                    let newX = currentPiece.x + c; let newY = currentPiece.y + r;
+                    if (newX < 0 || newX >= COL || newY >= ROW) return true;
+                    if (newY >= 0 && board[newY][newX]) return true;
+                }
+            }
+            return false;
+        }
+
+        function mergePiece() {
+            currentPiece.matrix.forEach((row, r) => {
+                row.forEach((val, c) => {
+                    if (val) board[currentPiece.y + r][currentPiece.x + c] = currentPiece.color;
+                });
+            });
+        }
+
+        function clearLines() {
+            for (let r = ROW - 1; r >= 0; r--) {
+                if (board[r].every(val => val !== 0)) {
+                    board.splice(r, 1); board.unshift(Array(COL).fill(0));
+                    tScore += 15; document.getElementById('tetrisScore').textContent = tScore;
+                    r++;
+                }
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (!isTetrisRunning) return;
+            if (e.key === "ArrowLeft") { currentPiece.x--; if (checkCollision()) currentPiece.x++; }
+            if (e.key === "ArrowRight") { currentPiece.x++; if (checkCollision()) currentPiece.x--; }
+            if (e.key === "ArrowDown") { updateTetris(); }
+            if (e.key === "ArrowUp") { 
+                let rotated = currentPiece.matrix[0].map((_, i) => currentPiece.matrix.map(row => row[i]).reverse());
+                let prevMatrix = currentPiece.matrix; currentPiece.matrix = rotated;
+                if (checkCollision()) currentPiece.matrix = prevMatrix;
+            }
+            drawBoard();
+        });
+    </script>
+</body>
+</html>

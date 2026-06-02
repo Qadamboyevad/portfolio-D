@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Hub | Kengaytirilgan Aloqa</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f111a;
+            --panel-bg: rgba(26, 29, 46, 0.8);
+            --text: #f5f6fa;
+            --text-muted: #a4b0be;
+            --primary: #00a8ff;
+            --primary-hover: #00c4ff;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --border: rgba(255, 255, 255, 0.06);
+            --neon-shadow: 0 0 15px rgba(0, 168, 255, 0.5);
+        }
+
+        [data-theme="light"] {
+            --bg: #f4f7f6;
+            --panel-bg: rgba(255, 255, 255, 0.85);
+            --text: #2d3436;
+            --text-muted: #636e72;
+            --primary: #0984e3;
+            --primary-hover: #74b9ff;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --border: rgba(0, 0, 0, 0.06);
+            --neon-shadow: 0 0 10px rgba(9, 132, 227, 0.2);
+        }
+
+        :root {
+            --bg: #0f111a;
+            --panel-bg: rgba(26, 29, 46, 0.8);
+            --text: #f5f6fa;
+            --text-muted: #a4b0be;
+            --primary: #00a8ff;
+            --primary-hover: #00c4ff;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --border: rgba(255, 255, 255, 0.06);
+            --neon-shadow: 0 0 15px rgba(0, 168, 255, 0.5);
+        }
+
+        [data-theme="light"] {
+            --bg: #f4f7f6;
+            --panel-bg: rgba(255, 255, 255, 0.85);
+            --text: #2d3436;
+            --text-muted: #636e72;
+            --primary: #0984e3;
+            --primary-hover: #74b9ff;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --border: rgba(0, 0, 0, 0.06);
+            --neon-shadow: 0 0 10px rgba(9, 132, 227, 0.2);
+        }
+
+        /* Universal selektordan transition olib tashlandi, body'ga berildi */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 50px;
+            overflow-x: hidden;
+            transition: background 0.3s, color 0.3s;
+            /* Rejim o'zgarganda silliq o'tishi uchun */
+        }
+
+        header {
+            background: var(--panel-bg);
+            backdrop-filter: blur(12px);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--card-shadow);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-btn {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        [data-theme="light"] .back-btn {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .logo-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: 1px;
+            text-shadow: var(--neon-shadow);
+        }
+
+        .theme-toggle {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            box-shadow: var(--neon-shadow);
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+            background: var(--primary-hover);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .welcome-section h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, var(--primary), #a29bfe);
+
+            -webkit-background-clip: text;
+
+            background-clip: text;
+
+
+            -webkit-text-fill-color: transparent;
+        }
+
+        .welcome-section p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .contact-section {
+            background: var(--panel-bg);
+            border: 1px solid var(--border);
+            padding: 40px;
+            border-radius: 28px;
+            box-shadow: var(--card-shadow);
+            margin-top: 20px;
+        }
+
+        .contact-section h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 5px;
+            background: linear-gradient(45deg, var(--primary), #a29bfe);
+
+            -webkit-background-clip: text;
+            background-clip: text;
+
+
+            -webkit-text-fill-color: transparent;
+            transition: none;
+  
+        }
+
+        .contact-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            font-size: 0.95rem;
+        }
+
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 40px;
+        }
+
+        @media (max-width: 992px) {
+            .contact-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            text-align: left;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .info-item i {
+            width: 45px;
+            height: 45px;
+            background: rgba(0, 168, 255, 0.1);
+            color: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .info-item h4 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .info-item p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: auto;
+            padding-top: 20px;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        [data-theme="light"] .social-links a {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .social-links a:hover {
+            background: var(--color);
+            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--color);
+        }
+
+        /* ================= QO'SHILGAN VA TO'G'RILANGAN INPUT STIllARI ================= */
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            text-align: left;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        @media (max-width: 600px) {
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            background: #0b0c16;
+            border: 1px solid var(--border);
+            padding: 14px;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            width: 100%;
+        }
+
+        .form-group select {
+            appearance: none;
+            cursor: pointer;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23a4b0be' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+
+        [data-theme="light"] .form-group input,
+        [data-theme="light"] .form-group select,
+        [data-theme="light"] .form-group textarea {
+            background: #fff;
+            color: #000;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(0, 168, 255, 0.2);
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, var(--primary), #a29bfe);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: var(--neon-shadow);
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        /* MULTI-INPUT FORM */
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            text-align: left;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        @media (max-width: 600px) {
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            background: #0b0c16;
+            border: 1px solid var(--border);
+            padding: 14px;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.3s;
+            width: 100%;
+        }
+
+        /* Select elementini to'g'rilash */
+        .form-group select {
+            appearance: none;
+            cursor: pointer;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23a4b0be' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+
+        [data-theme="light"] .form-group input,
+        [data-theme="light"] .form-group select,
+        [data-theme="light"] .form-group textarea {
+            background: #fff;
+            color: #000;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(0, 168, 255, 0.2);
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, var(--primary), #a29bfe);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: var(--neon-shadow);
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="index.html" onclick="location.reload()" class="back-btn"><i class="fa-solid fa-house"></i> Bosh
+                sahifa</a>
+            <div class="logo-title">Smart Hub Pro</div>
+            <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn"><i class="fa-solid fa-sun"></i></button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="welcome-section">
+            <h1>Premium Qayta Aloqa</h1>
+            <p>Biz bilan tez va oson bog'laning</p>
+        </div>
+
+        <div class="contact-section">
+            <h2>Biz bilan aloqa</h2>
+            <p class="contact-subtitle">Iltimos, so'rovingizni to'liqroq shakllantirish uchun quyidagi maydonlarni
+                to'ldiring.</p>
+
+            <div class="contact-container">
+                <div class="contact-info">
+                    <div class="info-item">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <div>
+                            <h4>Manzil</h4>
+                            <p>Toshkent shahar, Amir Temur ko'chasi, 24-uy</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fa-solid fa-envelope"></i>
+                        <div>
+                            <h4>Email</h4>
+                            <p>support@smarthub.uz</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fa-solid fa-phone"></i>
+                        <div>
+                            <h4>Telefon</h4>
+                            <p>+998 (71) 123-45-67</p>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#" style="--color: #0088cc;"><i class="fa-brands fa-telegram"></i></a>
+                        <a href="#" style="--color: #e1306c;"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" style="--color: #1877f2;"><i class="fa-brands fa-facebook"></i></a>
+                    </div>
+                </div>
+
+                <form class="contact-form" onsubmit="handleContactSubmit(event)">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="userName">Ism va Familiyangiz</label>
+                            <input type="text" id="userName" required placeholder="Masalan: Ali Valiyev">
+                        </div>
+                        <div class="form-group">
+                            <label for="userPhone">Telefon raqamingiz</label>
+                            <input type="tel" id="userPhone" required placeholder="+998 (90) 123-4567">
+                        </div>
+                        <div class="form-group">
+                            <label for="userEmail">Email manzilingiz</label>
+                            <input type="email" id="userEmail" required placeholder="example@mail.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="userSubject">Murojaat mavzusi</label>
+                            <select id="userSubject" required>
+                                <option value="" disabled selected>Mavzuni tanlang</option>
+                                <option value="Hamkorlik">Biznes Hamkorlik</option>
+                                <option value="Texnik Yordam">Texnik ko'mak</option>
+                                <option value="Taklif">Taklif va Mulohaza</option>
+                                <option value="Boshqa">Boshqa masalalar</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="userCompany">Kompaniya / Tashkilot nomi (Ixtiyoriy)</label>
+                            <input type="text" id="userCompany" placeholder="Kompaniyangiz nomi">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="userMessage">Xabaringiz matni</label>
+                            <textarea id="userMessage" rows="5" required
+                                placeholder="Loyihangiz yoki savolingiz haqida batafsil yozing..."></textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-btn">Ariza yuborish</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Kun/Tun rejimi (Default: Dark)
+        document.body.setAttribute('data-theme', 'dark');
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.getElementById('themeBtn');
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.setAttribute('data-theme', 'light');
+                btn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                btn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+            }
+        }
+
+        /* 📨 FORMANI QABUL QILISH */
+        function handleContactSubmit(event) {
+            event.preventDefault();
+            const name = document.getElementById('userName').value;
+            alert(`Rahmat, ${name}! Barcha ma'lumotlaringiz muvaffaqiyatli qabul qilindi. Tez orada aloqaga chiqamiz.`);
+            event.target.reset();
+        }
+    </script>
+</body>
+
+</html>
