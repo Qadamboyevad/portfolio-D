@@ -502,7 +502,7 @@
     </div>
 
     <script>
-        // Theme Engine
+   
         document.body.setAttribute('data-theme', 'dark');
         function toggleTheme() {
             const body = document.body;
@@ -516,7 +516,6 @@
             }
         }
 
-        // Modal Engine with smooth classes
         function openModal(id) {
             const modal = document.getElementById(id);
             modal.style.display = "flex";
@@ -533,14 +532,13 @@
             clearInterval(tetrisInterval); isTetrisRunning = false;
         }
 
-        // Page Scroll Freeze during gameplay
+  
         window.addEventListener("keydown", (e) => {
             if(["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.code)) {
                 if(isRaceRunning || isMarioRunning || isCookingRunning || isTetrisRunning) e.preventDefault();
             }
         });
 
-        // --- QUANTUM CALCULATOR ---
         let calcScr = document.getElementById('calcScreen');
         function pressCalc(val) {
             if (calcScr.value === "0" || calcScr.value === "ERROR") calcScr.value = val;
@@ -555,7 +553,6 @@
             } catch { calcScr.value = "ERROR"; }
         }
 
-        // --- GAME 1: NITRO RACING (SMOOTH STEERING) ---
         const rCanvas = document.getElementById('raceCanvas'); const rCtx = rCanvas.getContext('2d');
         let raceAnim, playerX, playerTargetX, enemies, raceScore, isRaceRunning = false, raceSpeed;
 
@@ -576,25 +573,23 @@
             if (!isRaceRunning) return;
             rCtx.fillStyle = "#020617"; rCtx.fillRect(0, 0, 340, 420);
             
-            // Smooth movement physics
+            
             playerX += (playerTargetX - playerX) * 0.25;
 
-            // Cyber Track Drawing
+       
             rCtx.strokeStyle = "rgba(99, 102, 241, 0.4)"; rCtx.lineWidth = 4;
             rCtx.beginPath(); rCtx.moveTo(45, 0); rCtx.lineTo(45, 420); rCtx.moveTo(295, 0); rCtx.lineTo(295, 420); rCtx.stroke();
 
-            // Scrolling Road Lines
             rCtx.fillStyle = "rgba(6, 182, 212, 0.3)";
             for (let i = 0; i < 420; i += 60) {
                 rCtx.fillRect(168, (i + (raceScore * 5) % 60), 4, 30);
             }
 
-            // Player neon asset
             rCtx.shadowBlur = 15; rCtx.shadowColor = "#06b6d4";
             rCtx.fillStyle = "#06b6d4"; rCtx.fillRect(playerX, 320, 45, 70);
             rCtx.fillStyle = "#fff"; rCtx.fillRect(playerX + 8, 330, 8, 12); rCtx.fillRect(playerX + 28, 330, 8, 12);
 
-            // Enemies logic
+            
             enemies.forEach(enemy => {
                 enemy.y += raceSpeed;
                 enemy.x += enemy.speedX;
@@ -603,7 +598,7 @@
                 rCtx.shadowColor = enemy.color; rCtx.fillStyle = enemy.color;
                 rCtx.fillRect(enemy.x, enemy.y, 45, 70);
 
-                // Collision detection bounds
+              
                 if (enemy.y + 70 > 320 && enemy.y < 390 && Math.abs(enemy.x - playerX) < 40) {
                     isRaceRunning = false;
                     setTimeout(() => alert("CRASH DETECTED! Total distance: " + raceScore + " KM"), 50);
@@ -624,7 +619,7 @@
             raceAnim = requestAnimationFrame(updateRace);
         }
 
-        // --- GAME 2: NEON JUMP (SMOOTH PHYSICS) ---
+        
         const mCanvas = document.getElementById('marioCanvas'); const mCtx = mCanvas.getContext('2d');
         let marioAnim, marioY, mVelocity, isJump, obsX, mScore, isMarioRunning = false, obsSpeed;
 
@@ -643,20 +638,18 @@
         function updateMario() {
             if (!isMarioRunning) return;
             mCtx.fillStyle = "#020617"; mCtx.fillRect(0, 0, 340, 420);
-            
-            // Ground
+         
             mCtx.fillStyle = "rgba(16, 185, 129, 0.2)"; mCtx.fillRect(0, 360, 340, 60);
             mCtx.fillStyle = "#10b981"; mCtx.fillRect(0, 360, 340, 4);
 
-            // Gravity simulation
+          
             mVelocity += 0.65; marioY += mVelocity;
             if (marioY >= 320) { marioY = 320; isJump = false; }
 
-            // Player
             mCtx.shadowBlur = 20; mCtx.shadowColor = "#10b981";
             mCtx.fillStyle = "#10b981"; mCtx.fillRect(60, marioY, 30, 40);
 
-            // Obstacle
+            
             obsX -= obsSpeed;
             if (obsX < -30) { obsX = 360; mScore++; obsSpeed += 0.35; document.getElementById('marioScore').textContent = mScore; }
             
@@ -671,7 +664,6 @@
             marioAnim = requestAnimationFrame(updateMario);
         }
 
-        // --- GAME 3: CYBER CHEF (ENERGY CAPTURE) ---
         const cCanvas = document.getElementById('cookCanvas'); const cCtx = cCanvas.getContext('2d');
         let cookAnim, basketX, basketTargetX, ingX, ingY, ingColor, cookScore, isCookingRunning = false, fallSpeed;
 
@@ -693,15 +685,14 @@
             if (!isCookingRunning) return;
             cCtx.fillStyle = "#020617"; cCtx.fillRect(0, 0, 340, 420);
             
-            basketX += (basketTargetX - basketX) * 0.3; // Elastic response
+            basketX += (basketTargetX - basketX) * 0.3; 
 
-            // Falling matrix sphere
             ingY += fallSpeed;
             cCtx.shadowBlur = 20; cCtx.shadowColor = ingColor;
             cCtx.fillStyle = ingColor;
             cCtx.beginPath(); cCtx.arc(ingX, ingY, 12, 0, Math.PI * 2); cCtx.fill();
 
-            // Neon catching pad
+            
             cCtx.shadowColor = "#a855f7"; cCtx.fillStyle = "#a855f7";
             cCtx.fillRect(basketX, 380, 70, 12);
             cCtx.shadowBlur = 0;
@@ -722,7 +713,6 @@
             cookAnim = requestAnimationFrame(updateCooking);
         }
 
-        // --- GAME 4: NEON TETRIS ---
         const tCanvas = document.getElementById('tetrisCanvas'); const tCtx = tCanvas.getContext('2d');
         const ROW = 20, COL = 12, SQ = 20;
         let tetrisInterval, board, currentPiece, tScore, isTetrisRunning = false;

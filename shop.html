@@ -1,924 +1,1058 @@
-    <!DOCTYPE html>
-    <html lang="uz">
+<!DOCTYPE html>
+<html lang="uz">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>MegaMarket | Do'kon sahifasi</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap"
-            rel="stylesheet">
-        <style>
-            :root {
-                --primary: #3867d6;
-                --primary-hover: #2b52b3;
-                --bg-main: #f1f2f6;
-                --text-main: #2f3542;
-                --text-muted: #747d8c;
-                --card-bg: #ffffff;
-                --border: #dcdde1;
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Megamarket</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --accent: #6366f1;
+            --accent-hover: #4f46e5;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --heart: #f43f5e;
+            --glass: rgba(30, 41, 59, 0.7);
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            padding: 20px;
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        /* Navigatsiya paneli */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            padding: 15px 25px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(to right, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            padding: 10px 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        #favBtn i {
+            color: var(--heart);
+        }
+
+        /* Qidiruv va Filtrlar */
+        .search-filter-section {
+            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .search-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-wrapper i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 16px 16px 16px 55px;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+
+        #searchInput:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .filter-tabs::-webkit-scrollbar {
+            height: 5px;
+        }
+
+        .filter-tabs::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .filter-tab {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-muted);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 10px 22px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .filter-tab.active,
+        .filter-tab:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        /* Mahsulotlar Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+            border-color: rgba(99, 102, 241, 0.2);
+        }
+
+        .wishlist-icon {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(8px);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .wishlist-icon i {
+            color: white;
+            font-size: 18px;
+        }
+
+        .wishlist-icon.liked i {
+            color: var(--heart);
+            font-weight: 900;
+        }
+
+        .img-container {
+            height: 280px;
+            overflow: hidden;
+            background: #151f32;
+            cursor: zoom-in;
+            /* Kattalashtirish belgisi */
+            position: relative;
+        }
+
+        /* Rasm ustiga kelganda kichik ko'z ikonka effekti */
+        .img-container {
+            height: 280px;
+            overflow: hidden;
+            background: #151f32;
+            cursor: zoom-in;
+            /* Kattalashtirish kursor belgisi qoladi */
+            position: relative;
+        }
+
+        .product-card:hover .img-container img {
+            transform: scale(1.06);
+            /* Rasm biroz kengayishi qoladi */
+        }
+
+        .img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-card:hover .img-container img {
+            transform: scale(1.06);
+        }
+
+        .info-container {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .category-tag {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--accent);
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .title-text {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .price-text {
+            font-size: 19px;
+            font-weight: 700;
+            color: #f8fafc;
+            margin-top: auto;
+            margin-bottom: 15px;
+        }
+
+        .buy-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: white;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .buy-btn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        /* YON PANEL (SIDEBAR) */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 380px;
+            height: 100%;
+            background: var(--card-bg);
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            padding: 30px 25px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar.open {
+            right: 0;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 15px;
+        }
+
+        .sidebar-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        /* Modallar */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-body {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .total-box {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-weight: 700;
+            font-size: 18px;
+            text-align: right;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            color: white;
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--accent);
+        }
+
+        .submit-order-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 14px;
+            width: 100%;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .no-items-text {
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .premium-round-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #f8fafc;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 8px 20px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+        }
+
+        .premium-round-btn:hover {
+            color: #ffffff;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            border-color: transparent;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+            transform: scale(1.05);
+        }
+
+        .premium-round-btn i {
+            font-size: 14px;
+        }
+
+        /* 🌌 RASMNI KATTA QILIB KO'RSATISH (LIGHTBOX MODAL) */
+        .image-lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            /* To'q va chiroyli fon */
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            cursor: zoom-out;
+            opacity: 0;
+            animation: fadeIn 0.25s forwards ease;
+        }
+
+        .lightbox-content {
+            max-width: 85%;
+            max-height: 85vh;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform: scale(0.9);
+            animation: zoomIn 0.25s forwards ease;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 25px;
+            right: 35px;
+            color: white;
+            font-size: 40px;
+            font-weight: 300;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .lightbox-close:hover {
+            color: var(--heart);
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
             }
+        }
 
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-                font-family: 'Plus Jakarta Sans', sans-serif;
-                transition: all 0.2s ease;
+        @keyframes zoomIn {
+            to {
+                transform: scale(1);
             }
-
-            body {
-                background-color: var(--bg-main);
-                color: var(--text-main);
-                padding-bottom: 60px;
-            }
-
-
-            header {
-                background: var(--card-bg);
-                border-bottom: 1px solid var(--border);
-                position: sticky;
-                top: 0;
-                z-index: 100;
-            }
-
-            .nav-container {
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 15px 20px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-
-            .back-home {
-                font-size: 1rem;
-                font-weight: 700;
-                color: var(--text-main);
-                text-decoration: none;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-            }
-
-            .back-home:hover {
-                color: var(--primary);
-            }
-
-            .search-bar {
-                flex: 0 1 450px;
-                position: relative;
-            }
-
-            .search-bar input {
-                width: 100%;
-                padding: 12px 15px;
-                border: 2px solid #dfe4ea;
-                border-radius: 12px;
-                outline: none;
-            }
-
-            .search-bar input:focus {
-                border-color: var(--primary);
-            }
-
-            .search-bar i {
-                position: absolute;
-                right: 15px;
-                top: 50%;
-                transform: translateY(-50%);
-                color: var(--text-muted);
-            }
-
-            .nav-icons {
-                display: flex;
-                gap: 20px;
-            }
-
-            .icon-btn {
-                background: none;
-                border: none;
-                font-size: 1.3rem;
-                color: var(--text-main);
-                cursor: pointer;
-                position: relative;
-            }
-
-            .badge {
-                position: absolute;
-                top: -5px;
-                right: -8px;
-                background: #ff4757;
-                color: white;
-                font-size: 0.7rem;
-                padding: 2px 6px;
-                border-radius: 50%;
-                font-weight: 700;
-            }
-
-
-            .category-filter-section {
-                max-width: 1200px;
-                margin: 25px auto 0;
-                padding: 0 20px;
-                display: flex;
-                gap: 12px;
-                flex-wrap: wrap;
-            }
-
-            .filter-btn {
-                background: white;
-                border: 1px solid var(--border);
-                padding: 10px 20px;
-                border-radius: 30px;
-                cursor: pointer;
-                font-weight: 600;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-            }
-
-            .filter-btn.active,
-            .filter-btn:hover {
-                background: var(--primary);
-                color: white;
-                border-color: var(--primary);
-            }
-
-
-            .container {
-                max-width: 1200px;
-                margin: 25px auto;
-                padding: 0 20px;
-            }
-
-            .section-title {
-                margin-bottom: 20px;
-                font-size: 1.5rem;
-                font-weight: 700;
-            }
-
-            .products-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-                gap: 25px;
-            }
-
-            .product-card {
-                background: var(--card-bg);
-                border-radius: 20px;
-                border: 1px solid #e4e7eb;
-                overflow: hidden;
-                position: relative;
-                display: flex;
-                flex-direction: column;
-            }
-
-            .product-wishlist {
-                position: absolute;
-                top: 15px;
-                right: 15px;
-                background: white;
-                width: 35px;
-                height: 35px;
-                border-radius: 50%;
-                border: none;
-                cursor: pointer;
-                color: var(--text-muted);
-                z-index: 2;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            }
-
-            .product-wishlist.liked i {
-                font-weight: 900;
-                color: #ff4757;
-            }
-
-            .product-img-wrapper {
-                width: 100%;
-                height: 220px;
-                background: #f1f2f6;
-                overflow: hidden;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .product-img-wrapper img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
-
-            .product-card[data-category="kitob"] .product-img-wrapper img {
-                width: auto;
-                height: 90%;
-                object-fit: contain;
-            }
-
-            .product-info {
-                padding: 20px;
-                display: flex;
-                flex-direction: column;
-                gap: 6px;
-                flex-grow: 1;
-            }
-
-            .product-cat {
-                font-size: 0.8rem;
-                color: var(--text-muted);
-                text-transform: uppercase;
-                font-weight: 600;
-            }
-
-            .restaurant-tag {
-                font-size: 0.8rem;
-                color: #ff9f43;
-                font-weight: 700;
-                display: flex;
-                align-items: center;
-                gap: 4px;
-            }
-
-            .product-title {
-                font-size: 1.05rem;
-                font-weight: 700;
-                line-height: 1.4;
-            
-                max-height: 2.95rem;
-            
-
-                display: -webkit-box;
-                -webkit-line-clamp: 2;
-    
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-            }
-
-            .product-price {
-                font-size: 1.2rem;
-                font-weight: 800;
-                color: var(--primary);
-                margin-top: auto;
-            }
-
-            .add-btn {
-                background: var(--primary);
-                color: white;
-                border: none;
-                padding: 12px;
-                border-radius: 12px;
-                font-weight: 600;
-                cursor: pointer;
-                margin-top: 10px;
-            }
-
-            .add-btn:hover {
-                background: var(--primary-hover);
-            }
-
-
-            .cart-modal {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.5);
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                z-index: 1000;
-                display: none;
-            }
-
-            .modal-content {
-                background: white;
-                padding: 30px;
-                border-radius: 24px;
-                max-width: 500px;
-                width: 90%;
-                max-height: 85vh;
-                overflow-y: auto;
-                position: relative;
-            }
-
-            .close-modal {
-                position: absolute;
-                top: 15px;
-                right: 20px;
-                font-size: 1.6rem;
-                cursor: pointer;
-                border: none;
-                background: none;
-            }
-
-            .modal-title {
-                font-size: 1.4rem;
-                margin-bottom: 15px;
-                font-weight: 700;
-            }
-
-            .cart-items-list {
-                margin-bottom: 20px;
-                border-bottom: 1px solid var(--border);
-                padding-bottom: 15px;
-            }
-
-            .cart-item {
-                display: flex;
-                justify-content: space-between;
-                margin-bottom: 12px;
-                font-size: 0.95rem;
-                background: #f8fafc;
-                padding: 10px;
-                border-radius: 8px;
-            }
-
-            .total-price-box {
-                font-size: 1.3rem;
-                font-weight: 800;
-                color: var(--primary);
-                margin-bottom: 20px;
-                text-align: right;
-            }
-
-            .order-form {
-                display: flex;
-                flex-direction: column;
-                gap: 12px;
-            }
-
-            .order-form input,
-            .order-form select {
-                padding: 12px;
-                border: 1px solid var(--border);
-                border-radius: 10px;
-                outline: none;
-                font-size: 0.95rem;
-                background: white;
-            }
-
-            .submit-btn {
-                background: #2f3542;
-                color: white;
-                border: none;
-                padding: 14px;
-                border-radius: 12px;
-                font-weight: 700;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-            }
-
-            .no-results {
-                grid-column: 1 / -1;
-                text-align: center;
-                padding: 40px;
-                color: var(--text-muted);
-                display: none;
-            }
-        </style>
-    </head>
-
-    <body>
-
-        <header>
-            <div class="nav-container">
-                <a href="index.html" class="back-home"><i class="fa-solid fa-arrow-left"></i> Bosh sahifa</a>
-
-                <div class="search-bar">
-                    <input type="text" id="searchInput" placeholder="Mahsulot yoki restoran qidirish...">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </div>
-
-                <div class="nav-icons">
-                    <button class="icon-btn"><i class="fa-regular fa-heart"></i><span class="badge"
-                            id="likeCount">0</span></button>
-                    <button class="icon-btn" onclick="openCart()"><i class="fa-solid fa-cart-shopping"></i><span
-                            class="badge" id="cartCount">0</span></button>
-                </div>
-            </div>
-        </header>
-
-        <div class="category-filter-section">
-            <button class="filter-btn active" onclick="filterCategory('all', this)"><i class="fa-solid fa-border-all"></i>
-                Hammasi</button>
-            <button class="filter-btn" onclick="filterCategory('kitob', this)"><i class="fa-solid fa-book"></i>
-                Kitoblar</button>
-            <button class="filter-btn" onclick="filterCategory('ovqat', this)"><i class="fa-solid fa-utensils"></i>
-                Ovqatlar</button>
-            <button class="filter-btn" onclick="filterCategory('kiyim', this)"><i class="fa-solid fa-shirt"></i>
-                Kiyimlar</button>
-            <button class="filter-btn" onclick="filterCategory('tufli', this)"><i class="fa-regular fa-heart"></i>
-                Tufli</button>
-            <button class="filter-btn" onclick="filterCategory('krosovka', this)"><i
-                    class="fa-solid fa-shoe-prints"></i></i>
-                Krasovka</button>
-            <button class="filter-btn" onclick="filterCategory('elektronika', this)"><i class="fa-solid fa-laptop"></i>
-                Elektronika</button>
-        </div>
-
-        <div class="container">
-            <h2 class="section-title" id="gridTitle">Barcha mahsulotlar</h2>
-            <div class="products-grid" id="productsGrid">
-
-                <div class="product-card" data-category="kitob">
-                    <button class="product-wishlist" onclick="toggleLike(this)"><i class="fa-regular fa-heart"></i></button>
-                    <div class="product-img-wrapper"><img
-                            src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=500"></div>
-                    <div class="product-info">
-                        <span class="product-cat">Kitob / Motivatsiya</span>
-                        <h3 class="product-title">"Atom odatlar" - Jeyms Klir</h3>
-                        <div class="product-price">45,000 so'm</div>
-                        <button class="add-btn" onclick="addToCart('Atom odatlar kitobi', 45000)">Savatga qo'shish</button>
-                    </div>
-                </div>
-
-                <div class="product-card" data-category="kitob">
-                    <button class="product-wishlist" onclick="toggleLike(this)"><i class="fa-regular fa-heart"></i></button>
-                    <div class="product-img-wrapper"><img
-                            src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=500"></div>
-                    <div class="product-info">
-                        <span class="product-cat">Kitob / Biznes</span>
-                        <h3 class="product-title">"Boy ota, kambag'al ota" - R. Kiyosaki</h3>
-                        <div class="product-price">39,000 so'm</div>
-                        <button class="add-btn" onclick="addToCart('Boy ota kambag\'al ota', 39000)">Savatga
-                            qo'shish</button>
-                    </div>
-                </div>
-
-                <div class="product-card" data-category="kitob">
-                    <button class="product-wishlist" onclick="toggleLike(this)"><i class="fa-regular fa-heart"></i></button>
-                    <div class="product-img-wrapper"><img
-                            src="https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=500"></div>
-                    <div class="product-info">
-                        <span class="product-cat">Kitob / Psixologiya</span>
-                        <h3 class="product-title">"Psixologik testlar to'plami"</h3>
-                        <div class="product-price">32,000 so'm</div>
-                        <button class="add-btn" onclick="addToCart('Psixologik testlar kitobi', 32000)">Savatga
-                            qo'shish</button>
-                    </div>
-                </div>
-
-                <div class="product-card" data-category="kitob">
-                    <button class="product-wishlist" onclick="toggleLike(this)"><i class="fa-regular fa-heart"></i></button>
-                    <div class="product-img-wrapper"><img
-                            src="https://images.unsplash.com/photo-1610116306796-6fea9f4fae38?w=500"></div>
-                    <div class="product-info">
-                        <span class="product-cat">Kitob / Jahon adabiyoti</span>
-                        <h3 class="product-title">"1984" - Jorj Oruell</h3>
-                        <div class="product-price">35,000 so'm</div>
-                        <button class="add-btn" onclick="addToCart('1984 Oruell', 35000)">Savatga qo'shish</button>
-                    </div>
-                </div>
-
-                <div class="product-card" data-category="ovqat">
-                    <button class="product-wishlist" onclick="toggleLike(this)"><i class="fa-regular fa-heart"></i></button>
-                    <div class="product-img-wrapper"><img
-                            src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500"></div>
-                    <div class="product-info">
-                        <span class="product-cat">Fast Food</span>
-                        <span class="restaurant-tag"><i class="fa-solid fa-shop"></i> MaxWay</span>
-                        <h3 class="product-title">Cheeseburger Max double</h3>
-                        <div class="product-price">35,000 so'm</div>
-                        <button class="add-btn" onclick="addToCart('Cheeseburger (MaxWay)', 35000)">Savatga
-                            qo'shish</button>
-                    </div>
-                </div>
-
-                <div class="product-card" data-category="ovqat">
-                    <button class="product-wishlist" onclick="toggleLike(this)"><i class="fa-regular fa-heart"></i></button>
-                    <div class="product-img-wrapper"><img
-                            src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500"></div>
-                    <div class="product-info">
-                        <span class="product-cat">Pizza</span>
-                        <span class="restaurant-tag"><i class="fa-solid fa-shop"></i> Bellissimo</span>
-                        <h3 class="product-title">Peperoni Pitsa (Katta)</h3>
-                        <div class="product-price">75,000 so'm</div>
-                        <button class="add-btn" onclick="addToCart('Peperoni Pitsa (Bellissimo)', 75000)">Savatga
-                            qo'shish</button>
-                    </div>
-                </div>
-
-                <div class="product-card" data-category="ovqat">
-                    <button class="product-wishlist" onclick="toggleLike(this)"><i class="fa-regular fa-heart"></i></button>
-                    <div class="product-img-wrapper"><img src="https://i.ytimg.com/vi/chqAcoWirF8/maxresdefault.jpg"></div>
-                    <div class="product-info">
-                        <span class="product-cat">Fast Food</span>
-                        <span class="restaurant-tag"><i class="fa-solid fa-shop"></i> EVOS</span>
-                        <h3 class="product-title">Mol Go'shtli Lavash Klasik</h3>
-                        <div class="product-price">29,000 so'm</div>
-                        <button class="add-btn" onclick="addToCart('Lavash (EVOS)', 29000)">Savatga qo'shish</button>
-                    </div>
-                </div>
-
-                <div class="product-card" data-category="ovqat">
-                    <button class="product-wishlist" onclick="toggleLike(this)"><i class="fa-regular fa-heart"></i></button>
-                    <div class="product-img-wrapper"><img
-                            src="https://imageproxy.wolt.com/menu/menu-images/67a5ecdc7bdda979a0ef7822/be693f7e-71e8-11f0-88ae-be0572bb645a_b8e80d22ab3ccd7725cbc95e1d8c3785.png">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-cat">Fast Food</span>
-                        <span class="restaurant-tag"><i class="fa-solid fa-shop"></i> EVOS</span>
-                        <h3 class="product-title"> Lavash </h3>
-                        <div class="product-price">39,000 so'm</div>
-                        <button class="add-btn" onclick="addToCart('Lavash (EVOS)', 39000)">Savatga qo'shish</button>
-                    </div>
-                </div>
-
-                <div class="product-card" data-category="kiyim">
-                    <button class="product-wishlist" onclick="toggleLike(this)"><i class="fa-regular fa-heart"></i></button>
-                    <div class="product-img-wrapper"><img
-                            src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500"></div>
-                    <div class="product-info">
-                        <span class="product-cat">Kiyimlar</span>
-                        <h3 class="product-title">Premium Erkaklar Futbolkasi (Oq)</h3>
-                        <div class="product-price">120,000 so'm</div>
-                        <button class="add-btn" onclick="addToCart('Erkaklar Futbolkasi', 120000)">Savatga qo'shish</button>
-                    </div>
-                </div>
-
-                <div class="product-card" data-category="kiyim">
-                    <button class="product-wishlist" onclick="toggleLike(this)"><i class="fa-regular fa-heart"></i></button>
-                    <div class="product-img-wrapper"><img
-                            src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500"></div>
-                    <div class="product-info">
-                        <span class="product-cat">Kiyimlar</span>
-                        <h3 class="product-title">Premium Erkaklar Futbolkasi (Oq)</h3>
-                        <div class="product-price">120,000 so'm</div>
-                        <button class="add-btn" onclick="addToCart('Erkaklar Futbolkasi', 120000)">Savatga qo'shish</button>
-                    </div>
-                </div>
-
-                <div class="product-card" data-category="kiyim">
-                    <button class="product-wishlist" onclick="toggleLike(this)"><i class="fa-regular fa-heart"></i></button>
-                    <div class="product-img-wrapper"><img
-                            src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500"></div>
-                    <div class="product-info">
-                        <span class="product-cat">Kiyimlar</span>
-                        <h3 class="product-title">Premium Erkaklar Futbolkasi (Oq)</h3>
-                        <div class="product-price">120,000 so'm</div>
-                        <button class="add-btn" onclick="addToCart('Erkaklar Futbolkasi', 120000)">Savatga qo'shish</button>
-                    </div>
-                </div>
-
-                <div class="product-card" data-category="kiyim">
-                    <button class="product-wishlist" onclick="toggleLike(this)"><i class="fa-regular fa-heart"></i></button>
-                    <div class="product-img-wrapper"><img
-                            src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=500"></div>
-                    <div class="product-info">
-                        <span class="product-cat">Kiyimlar</span>
-                        <h3 class="product-title">Premium Erkaklar Futbolkasi (Oq)</h3>
-                        <div class="product-price">200,000 so'm</div>
-                        <button class="add-btn" onclick="addToCart('Erkaklar Futbolkasi', 120000)">Savatga qo'shish</button>
-                    </div>
-                </div>
-
-                <div class="product-card" data-category="krosovka"> <button class="product-wishlist"
-                        onclick="toggleLike(this)">
-                        <i class="fa-regular fa-heart"></i> </button>
-                    <div class="product-img-wrapper">
-                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500" alt="Nike Air Max">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-cat"> Poyabzallar / Sport</span>
-                        <h3 class="product-title">Nike Air Max Sport Krossovka</h3>
-                        <div class="product-price">450,000 so'm</div>
-                        <button class="add-btn" onclick="addToCart('Nike Air Max Krossovka', 450000)">Savatga
-                            qo'shish</button>
-                    </div>
-                </div>
-
-                <div class="product-card" data-category="krosovka"> <button class="product-wishlist"
-                        onclick="toggleLike(this)">
-                        <i class="fa-regular fa-heart"></i> </button>
-                    <div class="product-img-wrapper">
-                        <img src="https://avatars.mds.yandex.net/i?id=d53346dd73bdd2a28fc1b6c35f5d1ada_l-8899644-images-thumbs&n=13"
-                            alt="Nike Air Max">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-cat"> Poyabzallar / Sport</span>
-                        <h3 class="product-title">Nike Sport Krossovkasi</h3>
-                        <div class="product-price">250,000 so'm</div>
-                        <button class="add-btn" onclick="addToCart('Nike Air Max Krossovka', 450000)">Savatga
-                            qo'shish</button>
-                    </div>
-                </div>
-
-                <div class="product-card" data-category="krosovka"> <button class="product-wishlist"
-                        onclick="toggleLike(this)">
-                        <i class="fa-regular fa-heart"></i> </button>
-                    <div class="product-img-wrapper">
-                        <img src="https://cdn.shopify.com/s/files/1/0603/3031/1875/files/main-square_3c49ba20-ecc8-47aa-844a-455645143018.jpg?v=1708314634"
-                            alt="Nike Air Max">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-cat"> Poyabzallar / Sport</span>
-                        <h3 class="product-title">Adidas Sport Krossovkasi</h3>
-                        <div class="product-price">250,000 so'm</div>
-                        <button class="add-btn" onclick="addToCart('Nike Air Max Krossovka', 450000)">Savatga
-                            qo'shish</button>
-                    </div>
-                </div>
-
-                <div class="product-card" data-category="krosovka"> <button class="product-wishlist"
-                        onclick="toggleLike(this)">
-                        <i class="fa-regular fa-heart"></i> </button>
-                    <div class="product-img-wrapper">
-                        <img src="https://m.media-amazon.com/images/I/617vcPLjUTL._AC_UY1000_.jpg" alt="Nike Air Max">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-cat"> Poyabzallar / Sport</span>
-                        <h3 class="product-title">Adidas </h3>
-                        <div class="product-price">500,000 so'm</div>
-                        <button class="add-btn" onclick="addToCart('Nike Air Max Krossovka', 450000)">Savatga
-                            qo'shish</button>
-                    </div>
-                </div>
-
-                <div class="product-card" data-category="krosovka"> <button class="product-wishlist"
-                        onclick="toggleLike(this)">
-                        <i class="fa-regular fa-heart"></i> </button>
-                    <div class="product-img-wrapper">
-                        <img src="https://ir.ozone.ru/s3/multimedia-3/c1000/6857129667.jpg" alt="Nike Air Max">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-cat"> Poyabzallar / Sport</span>
-                        <h3 class="product-title">Dior Brendli krasovka qizlar uchun </h3>
-                        <div class="product-price">500,000 so'm</div>
-                        <button class="add-btn" onclick="addToCart('Nike Air Max Krossovka', 450000)">Savatga
-                            qo'shish</button>
-                    </div>
-                </div>
-
-                <div class="product-card" data-category="krosovka"> <button class="product-wishlist"
-                        onclick="toggleLike(this)">
-                        <i class="fa-regular fa-heart"></i> </button>
-                    <div class="product-img-wrapper">
-                        <img src="https://avatars.mds.yandex.net/i?id=c04ea8dbe25cdf1d446fd60dfa27e76110b973bf-8529854-images-thumbs&n=13"
-                            alt="Nike Air Max">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-cat"> Poyabzallar / Sport</span>
-                        <h3 class="product-title">Chanel Brendli krasovka qizlar uchun </h3>
-                        <div class="product-price">500,000 so'm</div>
-                        <button class="add-btn" onclick="addToCart('Nike Air Max Krossovka', 450000)">Savatga
-                            qo'shish</button>
-                    </div>
-                </div>
-
-                <div class="product-card" data-category="tufli">
-                    <button class="product-wishlist" onclick="toggleLike(this)">
-                        <i class="fa-regular fa-heart"></i> </button>
-                    </button>
-                    <div class="product-img-wrapper">
-                        <img src="https://ir.ozone.ru/s3/multimedia-1-g/7163112184.jpg" alt="Dior Tufli">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-cat"> Poyabzallar / Klassik</span>
-                        <h3 class="product-title">Dior Brendli Tufli</h3>
-                        <div class="product-price">6,200,000 so'm</div> <button class="add-btn"
-                            onclick="addToCart('Dior Brendli Tufli', 6200000)">Savatga qo'shish</button>
-                    </div>
-                </div>
-
-                <div class="product-card" data-category="tufli">
-                    <button class="product-wishlist" onclick="toggleLike(this)">
-                        <i class="fa-regular fa-heart"></i> </button>
-                    </button>
-                    <div class="product-img-wrapper">
-                        <img src="https://i.pinimg.com/736x/05/6c/91/056c91ede2f021352cdfb9275c0c88b4.jpg" alt="Dior Tufli">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-cat"> Poyabzallar / Klassik</span>
-                        <h3 class="product-title"> Brendli Tufli</h3>
-                        <div class="product-price">3,200,000 so'm</div> <button class="add-btn"
-                            onclick="addToCart(' Brendli Tufli', 3200000)">Savatga qo'shish</button>
-                    </div>
-                </div>
-                <div class="product-card" data-category="tufli">
-                    <button class="product-wishlist" onclick="toggleLike(this)">
-                        <i class="fa-regular fa-heart"></i> </button>
-                    </button>
-                    <div class="product-img-wrapper">
-                        <img src="https://n.cdn.cdek.shopping/images/shopping/wrUcOpde39y9C6n6.jpg?v=1" alt="Dior Tufli">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-cat"> Poyabzallar / Klassik</span>
-                        <h3 class="product-title">Chanel Brendli Tufli</h3>
-                        <div class="product-price">6,200,000 so'm</div> <button class="add-btn"
-                            onclick="addToCart('Dior Brendli Tufli', 6200000)">Savatga qo'shish</button>
-                    </div>
-                </div>
-                <div class="product-card" data-category="tufli">
-                    <button class="product-wishlist" onclick="toggleLike(this)">
-                        <i class="fa-regular fa-heart"></i> </button>
-                    </button>
-                    <div class="product-img-wrapper">
-                        <img src="https://i.pinimg.com/736x/d3/2d/bf/d32dbf13e25fa6b585dc866a5121cef6.jpg" alt="Dior Tufli">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-cat"> Poyabzallar / Klassik</span>
-                        <h3 class="product-title">Chanel Brendli Tufli</h3>
-                        <div class="product-price">6,200,000 so'm</div> <button class="add-btn"
-                            onclick="addToCart('Chanel Brendli Tufli', 6200000)">Savatga qo'shish</button>
-                    </div>
-                </div>
-                <div class="product-card" data-category="tufli">
-                    <button class="product-wishlist" onclick="toggleLike(this)">
-                        <i class="fa-regular fa-heart"></i> </button>
-                    </button>
-                    <div class="product-img-wrapper">
-                        <img src="https://i.pinimg.com/1200x/51/a5/d1/51a5d10042a5add4f8ae1725ecf0a138.jpg"
-                            alt="Dior Tufli">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-cat"> Poyabzallar / Klassik</span>
-                        <h3 class="product-title"> Tufli</h3>
-                        <div class="product-price">5,100,000 so'm</div> <button class="add-btn"
-                            onclick="addToCart(' Tufli', 5100000)">Savatga qo'shish</button>
-                    </div>
-                </div>
-
-                <div class="product-card" data-category="tufli">
-                    <button class="product-wishlist" onclick="toggleLike(this)">
-                        <i class="fa-regular fa-heart"></i> </button>
-                    </button>
-                    <div class="product-img-wrapper">
-                        <img src="https://i.pinimg.com/736x/27/f5/1c/27f51c8ca5769d57930ee1a950be47d8.jpg" alt="Dior Tufli">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-cat"> Poyabzallar / Klassik</span>
-                        <h3 class="product-title"> Tufli</h3>
-                        <div class="product-price">4,100,000 so'm</div> <button class="add-btn"
-                            onclick="addToCart('Qizlar Tufli', 4100000)">Savatga qo'shish</button>
-                    </div>
-                </div>
-
-                <div class="product-card" data-category="tufli">
-                    <button class="product-wishlist" onclick="toggleLike(this)">
-                        <i class="fa-regular fa-heart"></i> </button>
-                    </button>
-                    <div class="product-img-wrapper">
-                        <img src="https://i.pinimg.com/1200x/2e/06/14/2e0614b2a79f0e838c7232729356ba03.jpg"
-                            alt="Dior Tufli">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-cat"> Poyabzallar / Klassik</span>
-                        <h3 class="product-title"> Tufli</h3>
-                        <div class="product-price">2,100,000 so'm</div> <button class="add-btn"
-                            onclick="addToCart(' Tufli', 2200000)">Savatga qo'shish</button>
-                    </div>
-                </div>
-
-                <div class="product-card" data-category="tufli">
-                    <button class="product-wishlist" onclick="toggleLike(this)">
-                        <i class="fa-regular fa-heart"></i> </button>
-                    </button>
-                    <div class="product-img-wrapper">
-                        <img src="https://i.pinimg.com/1200x/fe/2e/bb/fe2ebba2baa74e3d83585e0b5da6d529.jpg"
-                            alt="Dior Tufli">
-                    </div>
-                    <div class="product-info">
-                        <span class="product-cat"> Poyabzallar / Klassik</span>
-                        <h3 class="product-title"> Tufli</h3>
-                        <div class="product-price">3,100,000 so'm</div> <button class="add-btn"
-                            onclick="addToCart(' Tufli', 3100000)">Savatga qo'shish</button>
-                    </div>
-                </div>
-
-                <div class="product-card" data-category="elektronika">
-                    <button class="product-wishlist" onclick="toggleLike(this)"><i class="fa-regular fa-heart"></i></button>
-                    <div class="product-img-wrapper"><img
-                            src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500"></div>
-                    <div class="product-info">
-                        <span class="product-cat">Aksessuarlar</span>
-                        <h3 class="product-title">Simsiz Bluetooth Quloqchin</h3>
-                        <div class="product-price">250,000 so'm</div>
-                        <button class="add-btn" onclick="addToCart('Simsiz Quloqchin', 250000)">Savatga qo'shish</button>
-                    </div>
-                </div>
-
-                <div class="no-results" id="noResults">Hech narsa topilmadi 😕</div>
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="navbar">
+            <a href="index.html" class="premium-round-btn">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Orqaga</span>
+            </a>
+            <div class="logo"><i class="fa-solid fa-store"></i> MEGAMARKET</div>
+            <div class="nav-buttons">
+                <button class="nav-btn" id="favBtn" onclick="toggleSidebar(true)">
+                    <i class="fa-solid fa-heart"></i> (<span id="favCount">0</span>)
+                </button>
+                <button class="nav-btn" onclick="openCart()">
+                    <i class="fa-solid fa-bag-shopping"></i> Savat (<span id="cartCount">0</span>)
+                </button>
             </div>
         </div>
 
-        <div class="cart-modal" id="cartModal">
-            <div class="modal-content">
-                <button class="close-modal" onclick="closeCart()">&times;</button>
-                <h3 class="modal-title"><i class="fa-solid fa-basket-shopping"></i> Savatchangiz</h3>
-                <div class="cart-items-list" id="cartItemsList">
-                    <p style="color: var(--text-muted);">Savat bo'sh...</p>
-                </div>
-                <div class="total-price-box">Jami summa: <span id="totalPriceHtml">0 so'm</span></div>
-
-                <form class="order-form" onsubmit="sendOrder(event)">
-                    <input type="text" id="clientName" placeholder="Ismingiz" required>
-                    <input type="tel" id="clientPhone" placeholder="Telefon raqamingiz" required>
-                    <input type="text" id="clientAddress" placeholder="Manzilingiz" required>
-
-                    <select id="restaurantSelect">
-                        <option value="Tanlanmagan">-- Ovqatlar uchun restoranni tanlang (Ixtiyoriy) --</option>
-                        <option value="MaxWay">MaxWay</option>
-                        <option value="EVOS">EVOS</option>
-                        <option value="Bellissimo Pizza">Bellissimo Pizza</option>
-                    </select>
-
-                    <button type="submit" class="submit-btn"><i class="fa-brands fa-telegram"></i> Buyurtmani
-                        jo'natish</button>
-                </form>
+        <div class="search-filter-section">
+            <div class="search-wrapper">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="Mahsulot yoki ruknlarni qidiring...">
+            </div>
+            <div class="filter-tabs">
+                <button class="filter-tab active" onclick="filterCategory('all', this)">Barchasi</button>
+                <button class="filter-tab" onclick="filterCategory('tufli', this)">Poyabzallar</button>
+                <button class="filter-tab" onclick="filterCategory('kiyim', this)">Kiyim-kechak</button>
+                <button class="filter-tab" onclick="filterCategory('kitob', this)">Kitoblar</button>
+                <button class="filter-tab" onclick="filterCategory('ovqat', this)">Taomlar / FastFood</button>
+                <button class="filter-tab" onclick="filterCategory('elektronika', this)">Elektronika</button>
             </div>
         </div>
 
-        <script>
-            const searchInput = document.getElementById('searchInput');
-            const productCards = document.querySelectorAll('.product-card');
-            const noResults = document.getElementById('noResults');
+        <div id="noResults" class="no-items-text" style="display: none; font-size: 18px;">
+            🔍 Hech narsa topilmadi...
+        </div>
 
-            searchInput.addEventListener('input', function () {
-                const filterValue = searchInput.value.toLowerCase().trim();
-                let hasProducts = false;
-                productCards.forEach(card => {
-                    const title = card.querySelector('.product-title').textContent.toLowerCase();
-                    const category = card.querySelector('.product-cat').textContent.toLowerCase();
-                    if (title.includes(filterValue) || category.includes(filterValue)) {
-                        card.style.display = "flex"; hasProducts = true;
-                    } else { card.style.display = "none"; }
-                });
-                noResults.style.display = hasProducts ? "none" : "block";
+        <div class="products-grid">
+
+            <div class="product-card" data-category="tufli">
+                <button class="wishlist-icon" onclick="toggleLike(this, 'Premium Brend Tufli', 3200000)">
+                    <i class="fa-regular fa-heart"></i>
+                </button>
+                <div class="img-container" onclick="openLightbox(this)">
+                    <img src="https://n.cdn.cdek.shopping/images/shopping/wrUcOpde39y9C6n6.jpg?v=1" alt="Tufli">
+                </div>
+                <div class="info-container">
+                    <span class="category-tag">Poyabzal</span>
+                    <h3 class="title-text">Premium Brend Tufli</h3>
+                    <div class="price-text">3,200,000 so'm</div>
+                    <button class="buy-btn" onclick="addToCart('Premium Brend Tufli', 3200000)">Savatga
+                        qo'shish</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-category="tufli">
+                <button class="wishlist-icon" onclick="toggleLike(this, 'Dior Luxury Tufli', 6200000)">
+                    <i class="fa-regular fa-heart"></i>
+                </button>
+                <div class="img-container" onclick="openLightbox(this)">
+                    <img src="https://i.pinimg.com/736x/1a/1a/14/1a1a14cd63233c8307be62e2b5a5ce73.jpg" alt="Dior">
+                </div>
+                <div class="info-container">
+                    <span class="category-tag">Dior / Eksklyuziv</span>
+                    <h3 class="title-text">Dior Luxury Tufli</h3>
+                    <div class="price-text">6,200,000 so'm</div>
+                    <button class="buy-btn" onclick="addToCart('Dior Luxury Tufli', 6200000)">Savatga qo'shish</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-category="tufli">
+                <button class="wishlist-icon" onclick="toggleLike(this, 'ZARA Luxury Tufli', 6200000)">
+                    <i class="fa-regular fa-heart"></i>
+                </button>
+                <div class="img-container" onclick="openLightbox(this)">
+                    <img src="https://i.pinimg.com/736x/65/a9/cb/65a9cb9b278ccf8e1051695b843d35ec.jpg" alt="Dior">
+                </div>
+                <div class="info-container">
+                    <span class="category-tag">ZARA/ Eksklyuziv</span>
+                    <h3 class="title-text">ZARA Luxury Tufli</h3>
+                    <div class="price-text">6,200,000 so'm</div>
+                    <button class="buy-btn" onclick="addToCart('ZARA Luxury Tufli', 6200000)">Savatga qo'shish</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-category="tufli">
+                <button class="wishlist-icon" onclick="toggleLike(this, 'YSL Luxury Tufli', 6200000)">
+                    <i class="fa-regular fa-heart"></i>
+                </button>
+                <div class="img-container" onclick="openLightbox(this)">
+                    <img src="https://i.pinimg.com/736x/80/b5/d2/80b5d29b65394e287e71c4577d498414.jpg" alt="Dior">
+                </div>
+                <div class="info-container">
+                    <span class="category-tag">YSL / Eksklyuziv</span>
+                    <h3 class="title-text">YSL Luxury Tufli</h3>
+                    <div class="price-text">6,200,000 so'm</div>
+                    <button class="buy-btn" onclick="addToCart('YSL Luxury Tufli', 6200000)">Savatga qo'shish</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-category="kiyim">
+                <button class="wishlist-icon" onclick="toggleLike(this, 'Oversize Premium Hoodie', 450000)">
+                    <i class="fa-regular fa-heart"></i>
+                </button>
+                <div class="img-container" onclick="openLightbox(this)">
+                    <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500" alt="Hoodie">
+                </div>
+                <div class="info-container">
+                    <span class="category-tag">Kiyim / Erkaklar</span>
+                    <h3 class="title-text">Oversize Premium Hoodie</h3>
+                    <div class="price-text">450,000 so'm</div>
+                    <button class="buy-btn" onclick="addToCart('Oversize Premium Hoodie', 450000)">Savatga
+                        qo'shish</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-category="kiyim">
+                <button class="wishlist-icon" onclick="toggleLike(this, 'Oversize Premium Hoodie', 450000)">
+                    <i class="fa-regular fa-heart"></i>
+                </button>
+                <div class="img-container" onclick="openLightbox(this)">
+                    <img src="https://i.pinimg.com/736x/77/05/bd/7705bd79b86026676cc0df3e00e45948.jpg" alt="Hoodie">
+                </div>
+                <div class="info-container">
+                    <span class="category-tag">Kiyim / Ayollar</span>
+                    <h3 class="title-text">Oversize Premium Hoodie</h3>
+                    <div class="price-text">450,000 so'm</div>
+                    <button class="buy-btn" onclick="addToCart('Oversize Premium Hoodie', 450000)">Savatga
+                        qo'shish</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-category="kiyim">
+                <button class="wishlist-icon" onclick="toggleLike(this, 'Oversize Premium Hoodie', 450000)">
+                    <i class="fa-regular fa-heart"></i>
+                </button>
+                <div class="img-container" onclick="openLightbox(this)">
+                    <img src="https://i.pinimg.com/736x/15/c0/6c/15c06c025892d9643e12d44bedeaed1e.jpg" alt="Hoodie">
+                </div>
+                <div class="info-container">
+                    <span class="category-tag">Kiyim / Erkaklar</span>
+                    <h3 class="title-text">Oversize Premium Hoodie</h3>
+                    <div class="price-text">450,000 so'm</div>
+                    <button class="buy-btn" onclick="addToCart('Oversize Premium Hoodie', 450000)">Savatga
+                        qo'shish</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-category="kiyim">
+                <button class="wishlist-icon" onclick="toggleLike(this, 'Oversize Premium Hoodie', 450000)">
+                    <i class="fa-regular fa-heart"></i>
+                </button>
+                <div class="img-container" onclick="openLightbox(this)">
+                    <img src="https://i.pinimg.com/736x/33/43/e9/3343e92b2c7165844d44791f79d2b915.jpg" alt="Hoodie">
+                </div>
+                <div class="info-container">
+                    <span class="category-tag">Kiyim / Ayollar</span>
+                    <h3 class="title-text">Oversize Premium Hoodie</h3>
+                    <div class="price-text">450,000 so'm</div>
+                    <button class="buy-btn" onclick="addToCart('Oversize Premium Hoodie', 450000)">Savatga
+                        qo'shish</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-category="kitob">
+                <button class="wishlist-icon" onclick="toggleLike(this, 'Diqqat (Cal Newport)', 65000)">
+                    <i class="fa-regular fa-heart"></i>
+                </button>
+                <div class="img-container" onclick="openLightbox(this)">
+                    <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=500" alt="Kitob">
+                </div>
+                <div class="info-container">
+                    <span class="category-tag">Kitoblar / Biznes</span>
+                    <h3 class="title-text">Cal Newport - Diqqat (Deep Work)</h3>
+                    <div class="price-text">65,000 so'm</div>
+                    <button class="buy-btn" onclick="addToCart('Diqqat (Cal Newport)', 65000)">Savatga qo'shish</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-category="kitob">
+                <button class="wishlist-icon" onclick="toggleLike(this, 'Diqqat (Cal Newport)', 65000)">
+                    <i class="fa-regular fa-heart"></i>
+                </button>
+                <div class="img-container" onclick="openLightbox(this)">
+                    <img src="https://i.pinimg.com/736x/99/d3/d0/99d3d067a19638e9cbd59c1d9f8feb50.jpg" alt="Kitob">
+                </div>
+                <div class="info-container">
+                    <span class="category-tag">Kitoblar / Biznes</span>
+                    <h3 class="title-text">Qulog'im senda qizim</h3>
+                    <div class="price-text">60,000 so'm</div>
+                    <button class="buy-btn" onclick="addToCart('Diqqat (Cal Newport)', 65000)">Savatga qo'shish</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-category="kitob">
+                <button class="wishlist-icon" onclick="toggleLike(this, 'Diqqat (Cal Newport)', 65000)">
+                    <i class="fa-regular fa-heart"></i>
+                </button>
+                <div class="img-container" onclick="openLightbox(this)">
+                    <img src="https://i.pinimg.com/736x/9c/23/16/9c2316f3d649c2d810ccabddd4ebf061.jpg" alt="Kitob">
+                </div>
+                <div class="info-container">
+                    <span class="category-tag">Kitoblar / Biznes</span>
+                    <h3 class="title-text">REMARK <br> Qarzga olingan umr</h3>
+                    <div class="price-text">60,000 so'm</div>
+                    <button class="buy-btn" onclick="addToCart('Diqqat (Cal Newport)', 65000)">Savatga qo'shish</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-category="kitob">
+                <button class="wishlist-icon" onclick="toggleLike(this, 'Diqqat (Cal Newport)', 65000)">
+                    <i class="fa-regular fa-heart"></i>
+                </button>
+                <div class="img-container" onclick="openLightbox(this)">
+                    <img src="https://i.pinimg.com/736x/fc/84/91/fc849149658317d1564e1574b2c9d923.jpg" alt="Kitob">
+                </div>
+                <div class="info-container">
+                    <span class="category-tag">Kitoblar / Biznes</span>
+                    <h3 class="title-text">MEN <br> Bas qil ey nafs!</h3>
+                    <div class="price-text">60,000 so'm</div>
+                    <button class="buy-btn" onclick="addToCart('Diqqat (Cal Newport)', 65000)">Savatga qo'shish</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-category="ovqat">
+                <button class="wishlist-icon" onclick="toggleLike(this, 'Double Pepperoni Pizza', 85000)">
+                    <i class="fa-regular fa-heart"></i>
+                </button>
+                <div class="img-container" onclick="openLightbox(this)">
+                    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500" alt="Pizza">
+                </div>
+                <div class="info-container">
+                    <span class="category-tag">Taomlar / Issiq</span>
+                    <h3 class="title-text">Double Pepperoni Pizza</h3>
+                    <div class="price-text">85,000 so'm</div>
+                    <button class="buy-btn" onclick="addToCart('Double Pepperoni Pizza', 85000)">Savatga
+                        qo'shish</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-category="ovqat">
+                <button class="wishlist-icon" onclick="toggleLike(this, 'Double Pepperoni Pizza', 85000)">
+                    <i class="fa-regular fa-heart"></i>
+                </button>
+                <div class="img-container" onclick="openLightbox(this)">
+                    <img src="https://i.pinimg.com/736x/2c/41/e8/2c41e87be86e580b23524d7943a232eb.jpg" alt="Pizza">
+                </div>
+                <div class="info-container">
+                    <span class="category-tag">Taomlar / Issiq</span>
+                    <h3 class="title-text">Burger</h3>
+                    <div class="price-text">85,000 so'm</div>
+                    <button class="buy-btn" onclick="addToCart('Double Pepperoni Pizza', 85000)">Savatga
+                        qo'shish</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-category="ovqat">
+                <button class="wishlist-icon" onclick="toggleLike(this, 'Double Pepperoni Pizza', 85000)">
+                    <i class="fa-regular fa-heart"></i>
+                </button>
+                <div class="img-container" onclick="openLightbox(this)">
+                    <img src="https://i.pinimg.com/736x/e5/3a/a5/e53aa532ff2d5489ec3e98c680293e53.jpg" alt="Pizza">
+                </div>
+                <div class="info-container">
+                    <span class="category-tag">Taomlar / Issiq</span>
+                    <h3 class="title-text">Tacos</h3>
+                    <div class="price-text">85,000 so'm</div>
+                    <button class="buy-btn" onclick="addToCart('Double Pepperoni Pizza', 85000)">Savatga
+                        qo'shish</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-category="ovqat">
+                <button class="wishlist-icon" onclick="toggleLike(this, 'Double Pepperoni Pizza', 85000)">
+                    <i class="fa-regular fa-heart"></i>
+                </button>
+                <div class="img-container" onclick="openLightbox(this)">
+                    <img src="https://i.pinimg.com/736x/2f/ed/7f/2fed7fca2809b4d1a70ae68f85fc2c2d.jpg" alt="Pizza">
+                </div>
+                <div class="info-container">
+                    <span class="category-tag">Taomlar / Issiq</span>
+                    <h3 class="title-text">Double Pepperoni lavash</h3>
+                    <div class="price-text">85,000 so'm</div>
+                    <button class="buy-btn" onclick="addToCart('Double Pepperoni Pizza', 85000)">Savatga
+                        qo'shish</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-category="elektronika">
+                <button class="wishlist-icon" onclick="toggleLike(this, 'Simsiz Quloqchin v2', 250000)">
+                    <i class="fa-regular fa-heart"></i>
+                </button>
+                <div class="img-container" onclick="openLightbox(this)">
+                    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500" alt="Quloqchin">
+                </div>
+                <div class="info-container">
+                    <span class="category-tag">Aksessuarlar</span>
+                    <h3 class="title-text">Simsiz Bluetooth Quloqchin v2</h3>
+                    <div class="price-text">250,000 so'm</div>
+                    <button class="buy-btn" onclick="addToCart('Simsiz Quloqchin v2', 250000)">Savatga qo'shish</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-category="elektronika">
+                <button class="wishlist-icon" onclick="toggleLike(this, 'Simsiz Quloqchin v2', 250000)">
+                    <i class="fa-regular fa-heart"></i>
+                </button>
+                <div class="img-container" onclick="openLightbox(this)">
+                    <img src="https://i.pinimg.com/736x/72/fd/32/72fd3213a92e2dd498f5c24e70507fb6.jpg" alt="Quloqchin">
+                </div>
+                <div class="info-container">
+                    <span class="category-tag">Aksessuarlar</span>
+                    <h3 class="title-text">Simsiz Bluetooth Quloqchin </h3>
+                    <div class="price-text">50,000 so'm</div>
+                    <button class="buy-btn" onclick="addToCart('Simsiz Quloqchin ', 250000)">Savatga qo'shish</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-category="elektronika">
+                <button class="wishlist-icon" onclick="toggleLike(this, 'Iphone 17', 250000)">
+                    <i class="fa-regular fa-heart"></i>
+                </button>
+                <div class="img-container" onclick="openLightbox(this)">
+                    <img src="https://i.pinimg.com/736x/a0/24/15/a02415cce2ba57b175614711472039d5.jpg" alt="Quloqchin">
+                </div>
+                <div class="info-container">
+                    <span class="category-tag">Aksessuarlar</span>
+                    <h3 class="title-text">Iphone 17</h3>
+                    <div class="price-text">900,000 so'm</div>
+                    <button class="buy-btn" onclick="addToCart('Simsiz Quloqchin v2', 250000)">Savatga qo'shish</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-category="elektronika">
+                <button class="wishlist-icon" onclick="toggleLike(this, 'Simsiz Quloqchin v2', 250000)">
+                    <i class="fa-regular fa-heart"></i>
+                </button>
+                <div class="img-container" onclick="openLightbox(this)">
+                    <img src="https://i.pinimg.com/736x/d6/8f/36/d68f3667a9661426665af41afb5504d4.jpg" alt="Quloqchin">
+                </div>
+                <div class="info-container">
+                    <span class="category-tag">Aksessuarlar</span>
+                    <h3 class="title-text">Simsiz Bluetooth Quloqchin v2</h3>
+                    <div class="price-text">600,000 so'm</div>
+                    <button class="buy-btn" onclick="addToCart('Simsiz Quloqchin v2', 250000)">Savatga qo'shish</button>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div id="imageLightbox" class="image-lightbox" onclick="closeLightbox()">
+        <span class="lightbox-close">&times;</span>
+        <img id="lightboxTargetImg" class="lightbox-content" src="" alt="Kattalashtirilgan rasm">
+    </div>
+
+    <div class="sidebar" id="wishlistSidebar">
+        <div class="sidebar-header">
+            <h3><i class="fa-solid fa-heart" style="color:var(--heart)"></i> Saralanganlar</h3>
+            <button class="sidebar-close" onclick="toggleSidebar(false)">&times;</button>
+        </div>
+        <div id="wishlistContainer" class="no-items-text">Hech narsa tanlanmagan...</div>
+    </div>
+
+    <div class="modal-overlay" id="cartModal">
+        <div class="modal-body">
+            <button class="sidebar-close" style="position:absolute; top:20px; right:20px"
+                onclick="closeCart()">&times;</button>
+            <h3 style="margin-bottom: 20px;"><i class="fa-solid fa-bag-shopping" style="color:var(--accent)"></i>
+                Savatchangiz</h3>
+
+            <div id="cartItemsList">
+                <p class="no-items-text">Savat hozircha bo'sh...</p>
+            </div>
+
+            <div class="total-box">Jami: <span id="totalPriceHtml">0 so'm</span></div>
+
+            <form onsubmit="sendOrder(event)">
+                <input type="text" id="clientName" class="form-input" placeholder="Ismingiz" required>
+                <input type="tel" id="clientPhone" class="form-input" placeholder="Telefon raqamingiz" required>
+                <input type="text" id="clientAddress" class="form-input" placeholder="Yetkazib berish manzili" required>
+
+                <select id="restaurantSelect" class="form-input">
+                    <option value="Tanlanmagan">-- Faqat Taomlar uchun (Ixtiyoriy) --</option>
+                    <option value="MaxWay">MaxWay</option>
+                    <option value="EVOS">EVOS</option>
+                    <option value="Bellissimo Pizza">Bellissimo Pizza</option>
+                </select>
+
+                <button type="submit" class="submit-order-btn"><i class="fa-brands fa-telegram"></i> Telegram orqali
+                    jo'natish</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let cart = [];
+        let wishlist = [];
+
+        // 🔥 QIDIRUV FUNKSIYASI TUGATILGAN USLUBDA
+        document.getElementById('searchInput').addEventListener('input', function () {
+            const val = this.value.toLowerCase().trim();
+            let kiritilganMahsulotBormi = false;
+
+            document.querySelectorAll('.product-card').forEach(card => {
+                const title = card.querySelector('.title-text').textContent.toLowerCase();
+                const cat = card.querySelector('.category-tag').textContent.toLowerCase();
+
+                if (title.includes(val) || cat.includes(val)) {
+                    card.style.display = "flex";
+                    kiritilganMahsulotBormi = true;
+                } else {
+                    card.style.display = "none";
+                }
             });
 
-            function filterCategory(category, button) {
-                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-                let hasProducts = false;
-                productCards.forEach(card => {
-                    const cardCat = card.getAttribute('data-category');
-                    if (category === 'all' || cardCat === category) {
-                        card.style.display = "flex"; hasProducts = true;
-                    } else { card.style.display = "none"; }
-                });
-                noResults.style.display = hasProducts ? "none" : "block";
-            }
+            const noResultsEl = document.getElementById('noResults');
+            noResultsEl.style.display = kiritilganMahsulotBormi ? "none" : "block";
+        });
 
-            let totalLikes = 0;
-            function toggleLike(button) {
-                button.classList.toggle('liked');
-                totalLikes += button.classList.contains('liked') ? 1 : -1;
-                document.getElementById('likeCount').textContent = totalLikes;
-            }
+        // Filtratsiya
+        function filterCategory(cat, btn) {
+            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
 
-            let cart = [];
-            function addToCart(name, price) {
-                cart.push({ name: name, price: price });
-                updateCartUI();
-                alert(name + " qo'shildi!");
-            }
+            let kiritilganMahsulotBormi = false;
 
-            function updateCartUI() {
-                document.getElementById('cartCount').textContent = cart.length;
-                const listContainer = document.getElementById('cartItemsList');
-                const totalPriceHtml = document.getElementById('totalPriceHtml');
-                if (cart.length === 0) {
-                    listContainer.innerHTML = `<p>Savat bo'sh...</p>`;
-                    totalPriceHtml.textContent = "0 so'm"; return;
+            document.querySelectorAll('.product-card').forEach(card => {
+                if (cat === 'all' || card.dataset.category === cat) {
+                    card.style.display = "flex";
+                    kiritilganMahsulotBormi = true;
+                } else {
+                    card.style.display = "none";
                 }
-                let html = ""; let total = 0;
-                cart.forEach((item, index) => {
-                    html += `<div class="cart-item"><span>${index + 1}. ${item.name}</span><strong>${item.price.toLocaleString()} so'm</strong></div>`;
-                    total += item.price;
-                });
-                listContainer.innerHTML = html;
-                totalPriceHtml.textContent = total.toLocaleString() + " so'm";
+            });
+
+            document.getElementById('noResults').style.display = kiritilganMahsulotBormi ? "none" : "block";
+        }
+
+        // 📷 LIGHTBOX (RASMNI KATTA QILISH) FUNKSIYALARI
+        function openLightbox(element) {
+            const imgSrc = element.querySelector('img').src;
+            const lightbox = document.getElementById('imageLightbox');
+            const lightboxImg = document.getElementById('lightboxTargetImg');
+
+            lightboxImg.src = imgSrc;
+            lightbox.style.display = "flex";
+            document.body.style.overflow = "hidden"; // Orqa fonni skroll bo'lmaydigan qiladi
+        }
+
+        function closeLightbox() {
+            document.getElementById('imageLightbox').style.display = "none";
+            document.body.style.overflow = "auto"; // Skrollni qaytaradi
+        }
+
+        // Like va Sidebar boshqaruvi
+        function toggleSidebar(open) {
+            document.getElementById('wishlistSidebar').classList.toggle('open', open);
+        }
+
+        function toggleLike(btn, name, price) {
+            btn.classList.toggle('liked');
+            if (btn.classList.contains('liked')) {
+                wishlist.push({ name, price });
+            } else {
+                wishlist = wishlist.filter(item => item.name !== name);
             }
+            document.getElementById('favCount').textContent = wishlist.length;
+            updateWishlistUI();
+        }
 
-            function openCart() { document.getElementById('cartModal').style.display = "flex"; }
-            function closeCart() { document.getElementById('cartModal').style.display = "none"; }
-
-            function sendOrder(event) {
-                event.preventDefault();
-                if (cart.length === 0) return;
-                const name = document.getElementById('clientName').value;
-                const phone = document.getElementById('clientPhone').value;
-                const address = document.getElementById('clientAddress').value;
-                const restaurant = document.getElementById('restaurantSelect').value;
-
-                let message = `🛒 MEGAMARKET BUYURTMA\n\n👤 Mijoz: ${name}\n📞 Tel: ${phone}\n📍 Manzil: ${address}\n🏢 Restoran: ${restaurant}\n\n📦 Ro'yxat:\n`;
-                let total = 0;
-                cart.forEach((item, index) => {
-                    message += `${index + 1}. ${item.name} - ${item.price.toLocaleString()} so'm\n`;
-                    total += item.price;
-                });
-                message += `\n💰 Jami: ${total.toLocaleString()} so'm`;
-
-                window.open(`https://t.me/share/url?url=${encodeURIComponent(message)}`, '_blank');
-                cart = []; updateCartUI(); closeCart();
-                document.querySelector('.order-form').reset();
+        function updateWishlistUI() {
+            const container = document.getElementById('wishlistContainer');
+            if (wishlist.length === 0) {
+                container.innerHTML = "Hech narsa tanlanmagan...";
+                container.classList.add('no-items-text');
+                return;
             }
-        </script>
-    </body>
+            container.classList.remove('no-items-text');
+            let html = "";
+            wishlist.forEach(item => {
+                html += `<div class="item-row">
+                <span>${item.name}</span>
+                <strong style="color:var(--accent)">${item.price.toLocaleString()} so'm</strong>
+            </div>`;
+            });
+            container.innerHTML = html;
+        }
 
-    </html>
+        // Savat tizimi
+        function openCart() { document.getElementById('cartModal').style.display = "flex"; }
+        function closeCart() { document.getElementById('cartModal').style.display = "none"; }
+
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            document.getElementById('cartCount').textContent = cart.length;
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const list = document.getElementById('cartItemsList');
+            const totalEl = document.getElementById('totalPriceHtml');
+            if (cart.length === 0) {
+                list.innerHTML = `<p class="no-items-text">Savat hozircha bo'sh...</p>`;
+                totalEl.textContent = "0 so'm";
+                return;
+            }
+            let html = "", total = 0;
+            cart.forEach((item, index) => {
+                html += `<div class="item-row">
+                <span>${index + 1}. ${item.name}</span>
+                <strong>${item.price.toLocaleString()} so'm</strong>
+            </div>`;
+                total += item.price;
+            });
+            list.innerHTML = html;
+            totalEl.textContent = total.toLocaleString() + " so'm";
+        }
+
+        // Buyurtma berish
+        function sendOrder(e) {
+            e.preventDefault();
+            if (cart.length === 0) return;
+
+            const name = document.getElementById('clientName').value;
+            const phone = document.getElementById('clientPhone').value;
+            const addr = document.getElementById('clientAddress').value;
+            const rest = document.getElementById('restaurantSelect').value;
+
+            let msg = `🛒 BUYURTMA\n\n👤 Mijoz: ${name}\n📞 Tel: ${phone}\n📍 Manzil: ${addr}\n🏢 Restoran/Hamkor: ${rest}\n\n📦 Mahsulotlar:\n`;
+            let total = 0;
+            cart.forEach((item, i) => {
+                msg += `${i + 1}. ${item.name} (${item.price.toLocaleString()} so'm)\n`;
+                total += item.price;
+            });
+            msg += `\n💰 Jami: ${total.toLocaleString()} so'm`;
+
+            window.open(`https://t.me/share/url?url=${encodeURIComponent(msg)}`, '_blank');
+            cart = [];
+            updateCartUI();
+            document.getElementById('cartCount').textContent = 0;
+            closeCart();
+        }
+
+        // Global Hodisalar (ESC va Bo'shliq)
+        window.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                closeCart();
+                toggleSidebar(false);
+                closeLightbox(); // ESC bosilganda rasmni ham yopadi
+            }
+        });
+
+        window.addEventListener('click', function (event) {
+            const cartModal = document.getElementById('cartModal');
+            if (event.target === cartModal) {
+                closeCart();
+            }
+        });
+    </script>
+</body>
+
+</html>
